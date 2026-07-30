@@ -1,21 +1,267 @@
-
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Meme Genie</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meme Genie 🧞‍♂️ | iPhone Liquid Crystal Edition</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
 </head>
-<body>
-    <div class="genie">
-        <h1>Meme Genie 🧞‍♂️</h1>
-        <p>Think of a meme... I will guess it!</p>
+<body class="crystal-theme">
+    <!-- Dynamic HTML5 Crystal Particle Canvas -->
+    <canvas id="crystalCanvas"></canvas>
 
-        <div class="buttons">
-            <button onclick="startGame()">🎮 Play Game</button>
-            <button onclick="voiceMode()">🎤 Voice Mode</button>
+    <!-- iOS Dynamic Island Header -->
+    <header class="app-header crystal-header">
+        <div class="logo">
+            <div class="crystal-gem-icon">💎</div>
+            <span class="genie-icon">🧞‍♂️</span>
+            <div class="logo-stack">
+                <span class="logo-text">Meme Genie</span>
+                <span class="tagline-badge prism-badge">MADE BY MEMERS, MADE FOR MEMERS 🔥</span>
+            </div>
+        </div>
+        <div class="header-actions">
+            <button id="userProfileBtn" class="crystal-btn secondary" onclick="openProfileModal()">
+                <span id="userAvatar">😎</span> <span id="userNameLabel">Guest</span>
+            </button>
+            <button id="soundToggleBtn" class="crystal-icon-btn" title="Toggle Sound" onclick="toggleSound()">
+                <span id="soundIcon">🔊</span>
+            </button>
+            <button class="crystal-btn primary-prism" onclick="openAddMemeModal()">💎 Add Meme</button>
+        </div>
+    </header>
+
+    <!-- iOS Segmented Control Tabs -->
+    <nav class="nav-tabs-container crystal-nav">
+        <button class="nav-tab crystal-tab active" id="tabGenie" onclick="switchTab('genie')">🔮 Genie Reader</button>
+        <button class="nav-tab crystal-tab" id="tabArena" onclick="switchTab('arena')">⚔️ 5-Round Match</button>
+        <button class="nav-tab crystal-tab" id="tabFriends" onclick="switchTab('friends')">👥 Friends</button>
+        <button class="nav-tab crystal-tab" id="tabChat" onclick="switchTab('chat')">💬 Among Us Chat</button>
+    </nav>
+
+    <main class="main-container">
+        <!-- 1. GENIE CRYSTAL READER TAB -->
+        <div class="tab-content active" id="viewGenie">
+            <!-- 3D Genie Liquid Crystal Orb -->
+            <div class="genie-orb-wrap" id="genieCard">
+                <div class="orb-energy-ring"></div>
+                <div class="orb-energy-ring outer"></div>
+                <div class="crystal-orb">
+                    <div class="orb-inner-glow"></div>
+                    <div class="genie-avatar" id="genieAvatar">🧞‍♂️</div>
+                </div>
+                <div class="genie-status-badge crystal-badge" id="genieStatus">Gazing into the Liquid Mind Crystal...</div>
+            </div>
+
+            <div class="game-card crystal-panel tilt-card" id="gameArea">
+                <div class="welcome-screen">
+                    <h1 class="glow-title crystal-title">Think of any viral meme...</h1>
+                    <p class="subtitle">Answer a few questions and Meme Genie will reveal your meme inside the Crystal Orb!</p>
+
+                    <div class="tagline-banner crystal-banner">
+                        <span class="banner-sparkle">✨</span>
+                        <strong>MADE BY MEMERS, MADE FOR MEMERS</strong>
+                        <span class="banner-sparkle">✨</span>
+                    </div>
+
+                    <div class="stats-row">
+                        <div class="stat-pill crystal-pill"><span id="totalMemesCount">25</span> Memes Loaded</div>
+                        <div class="stat-pill crystal-pill">✨ Voice AI Ready</div>
+                        <div class="stat-pill crystal-pill">⚡ 99% Accuracy</div>
+                    </div>
+
+                    <div class="action-buttons">
+                        <button class="primary-btn crystal-btn-large pulse-glow" onclick="startGame()">🔮 Start Mind Reading</button>
+                        <button class="secondary-btn crystal-btn" onclick="toggleVoiceMode()" id="voiceModeBtn">🎤 Voice Mode: OFF</button>
+                    </div>
+                </div>
+            </div>
         </div>
 
-        <div id="gameArea"></div>
+        <!-- 2. 5-ROUND MATCH ARENA TAB -->
+        <div class="tab-content" id="viewArena">
+            <div class="crystal-panel match-arena-card tilt-card">
+                <div class="arena-header">
+                    <h2 class="crystal-title">⚔️ 5-Round Competitive Match Arena</h2>
+                    <p class="subtitle">Match with friends! The player who guesses the meme fastest wins maximum points!</p>
+                </div>
+
+                <div class="arena-setup" id="arenaSetup">
+                    <div class="action-buttons">
+                        <button class="primary-btn crystal-btn-large" onclick="createNewMatch()">🏆 Host 5-Round Match</button>
+                    </div>
+                    <div class="join-box" style="display:flex; gap:10px; justify-content:center; margin-top:15px;">
+                        <input type="text" id="joinRoomCode" class="crystal-input" placeholder="ROOM CODE (e.g. ROOM-777)" style="text-transform:uppercase;">
+                        <button class="secondary-btn crystal-btn" onclick="joinMatchRoom()">Join Match</button>
+                    </div>
+                </div>
+
+                <div class="active-match-room" id="activeMatchRoom" style="display:none;">
+                    <div class="match-meta-bar crystal-bar" style="display:flex; justify-content:space-between; padding:12px 20px; border-radius:18px; margin-bottom:15px;">
+                        <div class="room-tag">Room Code: <strong id="displayRoomCode" style="color:var(--neon-cyan);">ROOM-000</strong></div>
+                        <div class="round-tag">Round <span id="currRoundNum">1</span> of 5</div>
+                    </div>
+
+                    <div class="scoreboard-card crystal-subpanel">
+                        <h3>🏆 Live Scoreboard</h3>
+                        <div id="matchLeaderboard" class="leaderboard-list" style="display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin-top:10px;"></div>
+                    </div>
+
+                    <div class="match-round-card" style="margin-top:15px;">
+                        <div class="round-hint-box" id="roundHintBox">
+                            <div class="media-frame" id="matchMediaFrame"></div>
+                            <div class="hint-tags" id="matchHintTags" style="margin-top:10px;"></div>
+                        </div>
+
+                        <div class="speed-guess-form" style="display:flex; gap:10px; margin-top:15px;">
+                            <input type="text" id="matchGuessInput" class="crystal-input" placeholder="Type fast guess here..." style="flex:1;" onkeypress="if(event.key==='Enter') submitMatchSpeedGuess()">
+                            <button class="primary-btn crystal-btn" onclick="submitMatchSpeedGuess()">⚡ Submit Fast Guess!</button>
+                        </div>
+                        <div id="guessFeedback" class="feedback-msg" style="margin-top:10px; font-weight:700;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3. FRIENDS TAB -->
+        <div class="tab-content" id="viewFriends">
+            <div class="crystal-panel friends-card tilt-card">
+                <h2 class="crystal-title">👥 Friends & Requests</h2>
+                <div class="add-friend-bar" style="display:flex; gap:12px;">
+                    <input type="text" id="friendUsernameInput" class="crystal-input" placeholder="Friend's username (e.g. DogeMaster)" style="flex:1;">
+                    <button class="primary-btn crystal-btn" onclick="sendFriendRequest()">➕ Send Friend Request</button>
+                </div>
+
+                <div class="friends-grid" style="display:grid; grid-template-columns:1fr 1fr; gap:20px;">
+                    <div class="friends-section crystal-subpanel">
+                        <h3>📥 Pending Requests</h3>
+                        <div id="pendingRequestsList" class="requests-list" style="margin-top:10px;">
+                            <p class="empty-text">No pending requests</p>
+                        </div>
+                    </div>
+
+                    <div class="friends-section crystal-subpanel">
+                        <h3>🟢 My Memer Friends</h3>
+                        <div id="myFriendsList" class="friends-list" style="margin-top:10px;">
+                            <p class="empty-text">No friends added yet. Send a request above!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 4. AMONG US CHAT TAB -->
+        <div class="tab-content" id="viewChat">
+            <div class="crystal-panel chat-container-card tilt-card">
+                <div class="chat-header" style="display:flex; justify-content:space-between; align-items:center;">
+                    <h2 class="crystal-title">💬 Among Us Style Chat</h2>
+                    <span class="censor-badge crystal-censor">🧼 Profanity Filter Active</span>
+                </div>
+
+                <!-- Among Us Quick Chat Wheel -->
+                <div class="quick-chat-section">
+                    <span class="quick-title" style="font-size:13px; color:var(--text-secondary);">⚡ Quick Chat Bubbles:</span>
+                    <div class="quick-bubbles-grid" id="quickBubblesGrid" style="display:flex; gap:8px; flex-wrap:wrap; margin-top:8px;"></div>
+                </div>
+
+                <!-- Live Chat Feed -->
+                <div class="chat-feed crystal-feed" id="chatFeed">
+                    <div class="chat-msg system">
+                        <span class="sender">🧞‍♂️ Genie System:</span> Welcome to Meme Genie Chat! Keep it memey & friendly.
+                    </div>
+                </div>
+
+                <!-- Input Box -->
+                <div class="chat-input-bar" style="display:flex; gap:10px;">
+                    <input type="text" id="chatTextInput" class="crystal-input" placeholder="Type a message (Restricted words sanitized)..." style="flex:1;" onkeypress="if(event.key==='Enter') sendCustomChatMessage()">
+                    <button class="primary-btn crystal-btn" onclick="sendCustomChatMessage()">Send</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="app-footer">
+        <p>Meme Genie 🧞‍♂️ &bull; <strong style="color:var(--neon-cyan);">MADE BY MEMERS, MADE FOR MEMERS</strong> &bull; 2026</p>
+    </footer>
+
+    <!-- User Profile Modal -->
+    <div class="modal-overlay" id="profileModal">
+        <div class="modal-content crystal-panel">
+            <div class="modal-header">
+                <h2 class="crystal-title">😎 Set Your Memer Profile</h2>
+                <button class="close-btn" onclick="closeProfileModal()">&times;</button>
+            </div>
+            <form onsubmit="saveUserProfile(event)">
+                <div class="form-group" style="margin-bottom:15px; display:flex; flex-direction:column; gap:6px;">
+                    <label style="font-size:13px; color:#cbd5e1;">Username *</label>
+                    <input type="text" id="profileUsernameInput" class="crystal-input" placeholder="e.g. GigaChad_99" required>
+                </div>
+                <div class="form-group" style="margin-bottom:15px; display:flex; flex-direction:column; gap:6px;">
+                    <label style="font-size:13px; color:#cbd5e1;">Choose Avatar Emoji</label>
+                    <select id="profileAvatarSelect" class="crystal-input">
+                        <option value="😎">😎 Cool Memer</option>
+                        <option value="🗿">🗿 Giga Chad</option>
+                        <option value="🐕">🐕 Doge</option>
+                        <option value="🐸">🐸 Pepe</option>
+                        <option value="🔥">🔥 Lit</option>
+                    </select>
+                </div>
+                <button type="submit" class="primary-btn crystal-btn" style="width:100%;">Save Memer Handle</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal for Adding New Memes -->
+    <div class="modal-overlay" id="addMemeModal">
+        <div class="modal-content crystal-panel">
+            <div class="modal-header">
+                <h2 class="crystal-title">💎 Add a New Meme</h2>
+                <button class="close-btn" onclick="closeAddMemeModal()">&times;</button>
+            </div>
+            <form id="addMemeForm" onsubmit="submitNewMeme(event)">
+                <div class="form-group" style="margin-bottom:15px; display:flex; flex-direction:column; gap:6px;">
+                    <label style="font-size:13px; color:#cbd5e1;">Meme Name *</label>
+                    <input type="text" id="memeName" class="crystal-input" placeholder="e.g. Gigachad" required>
+                </div>
+                <div class="form-group" style="margin-bottom:15px; display:flex; flex-direction:column; gap:6px;">
+                    <label style="font-size:13px; color:#cbd5e1;">Media URL (Image or GIF/Video) *</label>
+                    <input type="url" id="memeMediaUrl" class="crystal-input" placeholder="https://..." required>
+                </div>
+                <div class="form-row" style="display:flex; gap:15px;">
+                    <div class="form-group" style="flex:1; margin-bottom:15px; display:flex; flex-direction:column; gap:6px;">
+                        <label style="font-size:13px; color:#cbd5e1;">Format</label>
+                        <select id="memeFormat" class="crystal-input">
+                            <option value="image">Image / GIF</option>
+                            <option value="video">Video</option>
+                        </select>
+                    </div>
+                    <div class="form-group" style="flex:1; margin-bottom:15px; display:flex; flex-direction:column; gap:6px;">
+                        <label style="font-size:13px; color:#cbd5e1;">Era</label>
+                        <select id="memeEra" class="crystal-input">
+                            <option value="2020s">2020s</option>
+                            <option value="2010s">2010s</option>
+                            <option value="2000s">2000s (Classic)</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group" style="margin-bottom:15px; display:flex; flex-direction:column; gap:6px;">
+                    <label style="font-size:13px; color:#cbd5e1;">Tags (comma separated)</label>
+                    <input type="text" id="memeTags" class="crystal-input" placeholder="e.g. music, global, troll, real_person">
+                </div>
+                <div class="form-group" style="margin-bottom:15px; display:flex; flex-direction:column; gap:6px;">
+                    <label style="font-size:13px; color:#cbd5e1;">Quotes / Catchphrases (comma separated)</label>
+                    <input type="text" id="memeQuotes" class="crystal-input" placeholder="e.g. Average Enjoyer, Yes">
+                </div>
+                <div class="form-group" style="margin-bottom:15px; display:flex; flex-direction:column; gap:6px;">
+                    <label style="font-size:13px; color:#cbd5e1;">Short Description</label>
+                    <textarea id="memeDesc" class="crystal-input" rows="2" placeholder="Brief backstory of the meme..."></textarea>
+                </div>
+                <button type="submit" class="primary-btn crystal-btn" style="width:100%;">Add Meme to Genie Memory</button>
+            </form>
+        </div>
     </div>
 
     <script src="game.js"></script>
