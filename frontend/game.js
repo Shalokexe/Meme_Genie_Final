@@ -1,8 +1,8 @@
 /**
- * Meme Genie 🧞‍♂️ - iPhone Liquid Crystal Edition Engine
+ * Meme Genie 🧞‍♂️ - iPhone Liquid Crystal & Meme Studio Edition Engine
  * "MADE BY MEMERS, MADE FOR MEMERS"
- * Features HTML5 Canvas Crystal Particle System, 3D Card Tilt,
- * Web Speech API, Web Audio Synthesizer, Among Us Chat & 5-Round Arena.
+ * Features HTML5 Canvas Meme Creator Studio, WebSockets Real-Time Sync,
+ * XP Leveling & Crystal Skins, Web Speech API & Sound Synthesizer.
  */
 
 const API_BASE = "http://127.0.0.1:8000/api";
@@ -11,7 +11,11 @@ const API_BASE = "http://127.0.0.1:8000/api";
 let currentUser = {
     user_id: "usr_guest_" + Math.floor(Math.random() * 1000),
     username: "MemerGuest_" + Math.floor(Math.random() * 100),
-    avatar_emoji: "😎"
+    avatar_emoji: "😎",
+    xp: 150,
+    level: 1,
+    badges: ["Meme Novice"],
+    active_skin: "cyan"
 };
 
 let currentSessionId = null;
@@ -20,11 +24,21 @@ let matchRoundStartTime = null;
 let soundEnabled = true;
 let voiceModeActive = false;
 let speechSynth = window.speechSynthesis;
-let speechRecognizer = null;
+let matchWebSocket = null;
 let chatPollInterval = null;
 let matchPollInterval = null;
 
-// HTML5 Canvas Crystal Particle Engine State
+// Template Preset Images for Meme Studio
+const MEME_TEMPLATES = {
+    "gigachad": "https://i.kym-cdn.com/entries/icons/original/000/026/152/gigachad.jpg",
+    "doge": "https://upload.wikimedia.org/wikipedia/en/5/5f/Original_Doge_meme.jpg",
+    "drake": "https://i.kym-cdn.com/entries/icons/original/000/019/649/Drake_Hotline_Bling.jpg",
+    "distracted_bf": "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=600&auto=format&fit=crop",
+    "woman_cat": "https://i.kym-cdn.com/entries/icons/original/000/031/015/cover5.jpg",
+    "rickroll": "https://media.giphy.com/media/Vuw9m5wXviFIQ/giphy.gif"
+};
+
+// HTML5 Canvas Crystal Particle Engine
 let canvas, ctx;
 let particles = [];
 const particleCount = 45;
@@ -34,7 +48,6 @@ function initCrystalParticles() {
     canvas = document.getElementById("crystalCanvas");
     if (!canvas) return;
     ctx = canvas.getContext("2d");
-    
     resizeCanvas();
     window.addEventListener("resize", resizeCanvas);
     window.addEventListener("mousemove", (e) => {
@@ -54,7 +67,6 @@ function initCrystalParticles() {
             alpha: Math.random() * 0.7 + 0.3
         });
     }
-
     animateParticles();
 }
 
@@ -67,17 +79,13 @@ function resizeCanvas() {
 function animateParticles() {
     if (!ctx) return;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-
     particles.forEach(p => {
-        p.x += p.speedX;
-        p.y += p.speedY;
-
+        p.x += p.speedX; p.y += p.speedY;
         if (p.x < 0) p.x = canvas.width;
         if (p.x > canvas.width) p.x = 0;
         if (p.y < 0) p.y = canvas.height;
         if (p.y > canvas.height) p.y = 0;
 
-        // Mouse reaction physics
         const dx = mousePos.x - p.x;
         const dy = mousePos.y - p.y;
         const dist = Math.sqrt(dx * dx + dy * dy);
@@ -96,11 +104,10 @@ function animateParticles() {
         ctx.fill();
         ctx.restore();
     });
-
     requestAnimationFrame(animateParticles);
 }
 
-// 3D Mouse Tilt Transformation Engine
+// 3D Card Perspective Mouse Tilt Engine
 function init3DCrystalTilt() {
     document.querySelectorAll(".tilt-card").forEach(card => {
         card.addEventListener("mousemove", (e) => {
@@ -111,7 +118,6 @@ function init3DCrystalTilt() {
             const centerY = rect.height / 2;
             const rotateX = ((y - centerY) / centerY) * -4;
             const rotateY = ((x - centerX) / centerX) * 4;
-
             card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
         });
 
@@ -121,7 +127,7 @@ function init3DCrystalTilt() {
     });
 }
 
-// Web Audio API Synthesizer (iOS Tactile Click & Chime)
+// Web Audio API Synthesizer (iOS Tactile Click & Victory Fanfare)
 let audioCtx = null;
 function getAudioContext() {
     if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -163,7 +169,7 @@ function playMagicSound(type) {
     } catch (e) {}
 }
 
-// Tab Navigation
+// Tab Navigation Controls
 function switchTab(tabName) {
     playMagicSound('click');
     document.querySelectorAll(".nav-tab").forEach(tab => tab.classList.remove("active"));
@@ -172,6 +178,10 @@ function switchTab(tabName) {
     if (tabName === 'genie') {
         document.getElementById("tabGenie").classList.add("active");
         document.getElementById("viewGenie").classList.add("active");
+    } else if (tabName === 'studio') {
+        document.getElementById("tabStudio").classList.add("active");
+        document.getElementById("viewStudio").classList.add("active");
+        updateStudioMemeCanvas();
     } else if (tabName === 'arena') {
         document.getElementById("tabArena").classList.add("active");
         document.getElementById("viewArena").classList.add("active");
@@ -187,16 +197,50 @@ function switchTab(tabName) {
     }
 }
 
-// User Profile Registration & Sync
+// User Profile & XP Sync
 async function syncUserProfile() {
     try {
         const res = await fetch(`${API_BASE}/user/profile?username=${encodeURIComponent(currentUser.username)}&avatar_emoji=${encodeURIComponent(currentUser.avatar_emoji)}`, { method: "POST" });
         const data = await res.json();
         if (data && data.user_id) {
             currentUser = data;
-            document.getElementById("userAvatar").innerText = currentUser.avatar_emoji;
-            document.getElementById("userNameLabel").innerText = currentUser.username;
+            renderUserStatsUI();
         }
+    } catch (e) {}
+}
+
+function renderUserStatsUI() {
+    document.getElementById("userAvatar").innerText = currentUser.avatar_emoji;
+    document.getElementById("userNameLabel").innerText = currentUser.username;
+    document.getElementById("hdrLevel").innerText = currentUser.level || 1;
+    document.getElementById("modalLevel").innerText = currentUser.level || 1;
+    document.getElementById("userXp").innerText = currentUser.xp || 100;
+
+    const xpPercent = Math.min(100, ((currentUser.xp % 250) / 250) * 100);
+    document.getElementById("xpBarFill").style.width = `${xpPercent}%`;
+
+    const bRow = document.getElementById("userBadgesRow");
+    if (bRow) {
+        bRow.innerHTML = (currentUser.badges || ["Meme Novice"]).map(b => `<span class="badge-pill">🏅 ${b}</span>`).join(" ");
+    }
+
+    if (currentUser.active_skin) {
+        changeCrystalOrbSkin(currentUser.active_skin);
+    }
+}
+
+async function changeCrystalOrbSkin(skinName) {
+    currentUser.active_skin = skinName;
+    const orb = document.getElementById("mainCrystalOrb");
+    if (orb) {
+        orb.className = `crystal-orb skin-${skinName}`;
+    }
+    try {
+        await fetch(`${API_BASE}/user/equip-skin`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ user_id: currentUser.user_id, skin_name: skinName })
+        });
     } catch (e) {}
 }
 
@@ -212,8 +256,101 @@ async function saveUserProfile(e) {
         currentUser.avatar_emoji = newAvatar;
         await syncUserProfile();
         closeProfileModal();
-        alert("✅ Profile updated! Welcome " + currentUser.username);
+        alert("✅ Profile & Skin updated! Welcome " + currentUser.username);
     }
+}
+
+// --- 🎨 IN-APP MEME CREATOR STUDIO ---
+function updateStudioMemeCanvas() {
+    const canvas = document.getElementById("memeStudioCanvas");
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    const templateKey = document.getElementById("studioTemplateSelect").value;
+    const topText = (document.getElementById("studioTopText").value || "WHEN YOU BUILD MEME GENIE").toUpperCase();
+    const bottomText = (document.getElementById("studioBottomText").value || "ABSOLUTE GIGACHAD").toUpperCase();
+    const fontSize = document.getElementById("studioFontSize").value || 32;
+    const textColor = document.getElementById("studioTextColor").value || "#ffffff";
+
+    const img = new Image();
+    img.crossOrigin = "Anonymous";
+    img.src = MEME_TEMPLATES[templateKey] || MEME_TEMPLATES["gigachad"];
+
+    img.onload = () => {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+        ctx.font = `900 ${fontSize}px ${currentUser.font_ios || 'Outfit'}, Impact, sans-serif`;
+        ctx.textAlign = "center";
+        ctx.fillStyle = textColor;
+        ctx.strokeStyle = "#000000";
+        ctx.lineWidth = Math.max(3, fontSize / 8);
+
+        // Draw Top Text
+        ctx.strokeText(topText, canvas.width / 2, parseInt(fontSize) + 15);
+        ctx.fillText(topText, canvas.width / 2, parseInt(fontSize) + 15);
+
+        // Draw Bottom Text
+        ctx.strokeText(bottomText, canvas.width / 2, canvas.height - 20);
+        ctx.fillText(bottomText, canvas.width / 2, canvas.height - 20);
+    };
+}
+
+async function publishStudioMeme() {
+    const templateKey = document.getElementById("studioTemplateSelect").value;
+    const topText = document.getElementById("studioTopText").value || "Custom Meme";
+    const bottomText = document.getElementById("studioBottomText").value || "Genie Memory";
+    const memeName = `${topText} ${bottomText}`;
+    const mediaUrl = MEME_TEMPLATES[templateKey] || MEME_TEMPLATES["gigachad"];
+
+    try {
+        const res = await fetch(`${API_BASE}/memes`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                name: memeName,
+                media_url: mediaUrl,
+                format: "image",
+                era: "2020s",
+                tags: ["custom", "studio", "global"],
+                quotes: [topText, bottomText],
+                description: `Created by ${currentUser.username} in Meme Studio`
+            })
+        });
+        if (res.ok) {
+            alert("🚀 1-Click Published! Your meme is now inside Genie's Memory!");
+            playMagicSound('victory');
+            // Award XP for creating meme
+            await fetch(`${API_BASE}/user/award-xp?user_id=${currentUser.user_id}&xp_amount=50&badge=Meme%20Picasso`, { method: "POST" });
+            syncUserProfile();
+        }
+    } catch (e) { alert("Failed to publish meme."); }
+}
+
+function downloadStudioMeme() {
+    const canvas = document.getElementById("memeStudioCanvas");
+    if (!canvas) return;
+    const link = document.createElement("a");
+    link.download = `MemeGenie_${Date.now()}.png`;
+    link.href = canvas.toDataURL("image/png");
+    link.click();
+    playMagicSound('click');
+}
+
+// --- ⚡ WEBSOCKETS REAL-TIME MATCH ARENA ---
+function initMatchWebSocket(roomCode) {
+    if (matchWebSocket) matchWebSocket.close();
+    const wsUrl = `ws://127.0.0.1:8000/api/ws/match/${roomCode}/${currentUser.user_id}`;
+    
+    try {
+        matchWebSocket = new WebSocket(wsUrl);
+        matchWebSocket.onopen = () => console.log("⚡ WebSockets Connected to Room:", roomCode);
+        matchWebSocket.onmessage = (event) => {
+            const data = JSON.parse(event.data);
+            console.log("⚡ WS Event:", data);
+            pollMatchState();
+        };
+        matchWebSocket.onerror = (err) => console.warn("WebSocket Error:", err);
+    } catch (e) {}
 }
 
 // --- AMONG US STYLE CHAT & PROFANITY FILTER ---
@@ -378,6 +515,7 @@ function enterMatchRoom(roomCode) {
     document.getElementById("activeMatchRoom").style.display = "block";
     document.getElementById("displayRoomCode").innerText = roomCode;
     matchRoundStartTime = Date.now();
+    initMatchWebSocket(roomCode);
     startMatchPolling();
 }
 
@@ -413,7 +551,7 @@ async function pollMatchState() {
 function startMatchPolling() {
     if (matchPollInterval) clearInterval(matchPollInterval);
     pollMatchState();
-    matchPollInterval = setInterval(pollMatchState, 2000);
+    matchPollInterval = setInterval(pollMatchState, 2500);
 }
 
 async function submitMatchSpeedGuess() {
@@ -441,6 +579,7 @@ async function submitMatchSpeedGuess() {
         if (data.correct) {
             fb.innerHTML = `🎯 <span style="color:var(--neon-cyan);">CORRECT! +${data.points_earned} Points! (${data.target_name})</span>`;
             playMagicSound('victory');
+            syncUserProfile();
         } else {
             fb.innerHTML = `❌ <span style="color:#ef4444;">${data.message || 'Incorrect guess'}</span>`;
         }
@@ -542,6 +681,7 @@ function renderGuessReveal(meme, confidence) {
             </div>
         </div>
     `;
+    fetch(`${API_BASE}/user/award-xp?user_id=${currentUser.user_id}&xp_amount=50`, { method: "POST" }).then(() => syncUserProfile());
 }
 
 function setGenieMood(state, statusText, emoji) {

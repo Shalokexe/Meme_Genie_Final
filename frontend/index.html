@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Meme Genie 🧞‍♂️ | iPhone Liquid Crystal Edition</title>
+    <title>Meme Genie 🧞‍♂️ | Liquid Crystal & Meme Studio Edition</title>
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -24,6 +24,7 @@
             </div>
         </div>
         <div class="header-actions">
+            <div class="user-level-badge" id="userLevelBadge">Lvl <span id="hdrLevel">1</span></div>
             <button id="userProfileBtn" class="crystal-btn secondary" onclick="openProfileModal()">
                 <span id="userAvatar">😎</span> <span id="userNameLabel">Guest</span>
             </button>
@@ -37,6 +38,7 @@
     <!-- iOS Segmented Control Tabs -->
     <nav class="nav-tabs-container crystal-nav">
         <button class="nav-tab crystal-tab active" id="tabGenie" onclick="switchTab('genie')">🔮 Genie Reader</button>
+        <button class="nav-tab crystal-tab" id="tabStudio" onclick="switchTab('studio')">🎨 Meme Studio</button>
         <button class="nav-tab crystal-tab" id="tabArena" onclick="switchTab('arena')">⚔️ 5-Round Match</button>
         <button class="nav-tab crystal-tab" id="tabFriends" onclick="switchTab('friends')">👥 Friends</button>
         <button class="nav-tab crystal-tab" id="tabChat" onclick="switchTab('chat')">💬 Among Us Chat</button>
@@ -49,7 +51,7 @@
             <div class="genie-orb-wrap" id="genieCard">
                 <div class="orb-energy-ring"></div>
                 <div class="orb-energy-ring outer"></div>
-                <div class="crystal-orb">
+                <div class="crystal-orb skin-cyan" id="mainCrystalOrb">
                     <div class="orb-inner-glow"></div>
                     <div class="genie-avatar" id="genieAvatar">🧞‍♂️</div>
                 </div>
@@ -81,12 +83,64 @@
             </div>
         </div>
 
-        <!-- 2. 5-ROUND MATCH ARENA TAB -->
+        <!-- 2. MEME CREATOR STUDIO TAB -->
+        <div class="tab-content" id="viewStudio">
+            <div class="crystal-panel studio-card tilt-card">
+                <div class="studio-header">
+                    <h2 class="crystal-title">🎨 In-App Meme Creator Studio</h2>
+                    <p class="subtitle">Design your custom meme, download it, and 1-click publish it to Genie's memory!</p>
+                </div>
+
+                <div class="studio-workspace">
+                    <div class="studio-controls crystal-subpanel">
+                        <div class="form-group">
+                            <label>Select Template</label>
+                            <select id="studioTemplateSelect" class="crystal-input" onchange="updateStudioMemeCanvas()">
+                                <option value="gigachad">🗿 GigaChad</option>
+                                <option value="doge">🐕 Doge</option>
+                                <option value="drake"> Drake Hotline Bling</option>
+                                <option value="distracted_bf">👫 Distracted Boyfriend</option>
+                                <option value="woman_cat">🐈 Woman Yelling at Cat</option>
+                                <option value="rickroll">🕺 Rickroll Classic</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Top Text</label>
+                            <input type="text" id="studioTopText" class="crystal-input" placeholder="e.g. WHEN YOU BUILD MEME GENIE" oninput="updateStudioMemeCanvas()">
+                        </div>
+                        <div class="form-group">
+                            <label>Bottom Text</label>
+                            <input type="text" id="studioBottomText" class="crystal-input" placeholder="e.g. ABSOLUTE GIGACHAD" oninput="updateStudioMemeCanvas()">
+                        </div>
+                        <div class="form-row" style="display:flex; gap:10px;">
+                            <div class="form-group" style="flex:1;">
+                                <label>Text Size (<span id="fontSizeVal">32</span>px)</label>
+                                <input type="range" id="studioFontSize" min="18" max="50" value="32" oninput="document.getElementById('fontSizeVal').innerText=this.value; updateStudioMemeCanvas();">
+                            </div>
+                            <div class="form-group" style="flex:1;">
+                                <label>Text Color</label>
+                                <input type="color" id="studioTextColor" value="#ffffff" onchange="updateStudioMemeCanvas()">
+                            </div>
+                        </div>
+                        <div class="studio-actions" style="display:flex; gap:10px; margin-top:15px;">
+                            <button class="primary-btn crystal-btn" style="flex:1;" onclick="publishStudioMeme()">🚀 1-Click Publish to Genie</button>
+                            <button class="secondary-btn crystal-btn" onclick="downloadStudioMeme()">💾 Download PNG</button>
+                        </div>
+                    </div>
+
+                    <div class="studio-preview-box">
+                        <canvas id="memeStudioCanvas" width="450" height="350"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3. 5-ROUND MATCH ARENA TAB -->
         <div class="tab-content" id="viewArena">
             <div class="crystal-panel match-arena-card tilt-card">
                 <div class="arena-header">
                     <h2 class="crystal-title">⚔️ 5-Round Competitive Match Arena</h2>
-                    <p class="subtitle">Match with friends! The player who guesses the meme fastest wins maximum points!</p>
+                    <p class="subtitle">Match with friends via WebSockets! Fast guesses win maximum XP & points!</p>
                 </div>
 
                 <div class="arena-setup" id="arenaSetup">
@@ -106,7 +160,7 @@
                     </div>
 
                     <div class="scoreboard-card crystal-subpanel">
-                        <h3>🏆 Live Scoreboard</h3>
+                        <h3>🏆 Live Scoreboard (WebSockets Synced)</h3>
                         <div id="matchLeaderboard" class="leaderboard-list" style="display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin-top:10px;"></div>
                     </div>
 
@@ -126,7 +180,7 @@
             </div>
         </div>
 
-        <!-- 3. FRIENDS TAB -->
+        <!-- 4. FRIENDS TAB -->
         <div class="tab-content" id="viewFriends">
             <div class="crystal-panel friends-card tilt-card">
                 <h2 class="crystal-title">👥 Friends & Requests</h2>
@@ -153,7 +207,7 @@
             </div>
         </div>
 
-        <!-- 4. AMONG US CHAT TAB -->
+        <!-- 5. AMONG US CHAT TAB -->
         <div class="tab-content" id="viewChat">
             <div class="crystal-panel chat-container-card tilt-card">
                 <div class="chat-header" style="display:flex; justify-content:space-between; align-items:center;">
@@ -161,20 +215,17 @@
                     <span class="censor-badge crystal-censor">🧼 Profanity Filter Active</span>
                 </div>
 
-                <!-- Among Us Quick Chat Wheel -->
                 <div class="quick-chat-section">
                     <span class="quick-title" style="font-size:13px; color:var(--text-secondary);">⚡ Quick Chat Bubbles:</span>
                     <div class="quick-bubbles-grid" id="quickBubblesGrid" style="display:flex; gap:8px; flex-wrap:wrap; margin-top:8px;"></div>
                 </div>
 
-                <!-- Live Chat Feed -->
                 <div class="chat-feed crystal-feed" id="chatFeed">
                     <div class="chat-msg system">
                         <span class="sender">🧞‍♂️ Genie System:</span> Welcome to Meme Genie Chat! Keep it memey & friendly.
                     </div>
                 </div>
 
-                <!-- Input Box -->
                 <div class="chat-input-bar" style="display:flex; gap:10px;">
                     <input type="text" id="chatTextInput" class="crystal-input" placeholder="Type a message (Restricted words sanitized)..." style="flex:1;" onkeypress="if(event.key==='Enter') sendCustomChatMessage()">
                     <button class="primary-btn crystal-btn" onclick="sendCustomChatMessage()">Send</button>
@@ -209,7 +260,28 @@
                         <option value="🔥">🔥 Lit</option>
                     </select>
                 </div>
-                <button type="submit" class="primary-btn crystal-btn" style="width:100%;">Save Memer Handle</button>
+
+                <div class="profile-xp-section crystal-subpanel" style="margin-bottom:15px;">
+                    <div style="display:flex; justify-content:space-between; font-size:13px; font-weight:700;">
+                        <span>XP Progress</span>
+                        <span>Level <span id="modalLevel">1</span> (<span id="userXp">150</span> XP)</span>
+                    </div>
+                    <div class="progress-bar-bg" style="margin-top:6px;"><div class="progress-bar-fill" id="xpBarFill" style="width:40%;"></div></div>
+                    <div class="badges-row" id="userBadgesRow" style="display:flex; gap:6px; flex-wrap:wrap; margin-top:10px;"></div>
+                </div>
+
+                <div class="form-group" style="margin-bottom:15px; display:flex; flex-direction:column; gap:6px;">
+                    <label style="font-size:13px; color:#cbd5e1;">Custom Crystal Orb Skin</label>
+                    <select id="profileSkinSelect" class="crystal-input" onchange="changeCrystalOrbSkin(this.value)">
+                        <option value="cyan">💎 Diamond Cyan (Default)</option>
+                        <option value="ruby">🔴 Ruby Red (Level 2 Unlocked)</option>
+                        <option value="sapphire">🔵 Sapphire Blue (Level 3 Unlocked)</option>
+                        <option value="emerald">🟢 Emerald Green (Level 4 Unlocked)</option>
+                        <option value="amethyst">🟣 Amethyst Purple (Level 5 Unlocked)</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="primary-btn crystal-btn" style="width:100%;">Save Memer Handle & Skin</button>
             </form>
         </div>
     </div>

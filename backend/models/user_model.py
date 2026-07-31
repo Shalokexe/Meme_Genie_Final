@@ -7,6 +7,10 @@ class UserProfile(BaseModel):
     avatar_emoji: str = "😎"
     status: str = "online"
     score_total: int = 0
+    xp: int = 150
+    level: int = 1
+    badges: List[str] = ["Meme Novice"]
+    active_skin: str = "cyan"  # 'cyan', 'ruby', 'sapphire', 'emerald', 'amethyst'
     friends: List[str] = []  # user_ids
 
 class FriendRequest(BaseModel):
@@ -57,3 +61,7 @@ class MatchGuessSubmit(BaseModel):
     user_id: str
     guess_text: str
     seconds_taken: float
+
+class SkinEquipRequest(BaseModel):
+    user_id: str
+    skin_name: str

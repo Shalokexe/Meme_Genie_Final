@@ -126,7 +126,18 @@ body.crystal-theme {
 
 .header-actions {
     display: flex;
+    align-items: center;
     gap: 10px;
+}
+
+.user-level-badge {
+    background: var(--ios-gold-gradient);
+    color: #030308;
+    font-weight: 900;
+    padding: 6px 14px;
+    border-radius: 18px;
+    font-size: 13px;
+    box-shadow: 0 4px 15px rgba(251, 191, 36, 0.4);
 }
 
 /* iOS Crystal Buttons */
@@ -148,9 +159,7 @@ body.crystal-theme {
     box-shadow: 0 8px 20px rgba(0,0,0,0.4);
 }
 
-.crystal-icon-btn:active {
-    transform: scale(0.92);
-}
+.crystal-icon-btn:active { transform: scale(0.92); }
 
 .crystal-btn {
     background: var(--ios-glass-bg);
@@ -176,9 +185,7 @@ body.crystal-theme {
     transform: translateY(-2px);
 }
 
-.crystal-btn:active {
-    transform: scale(0.96);
-}
+.crystal-btn:active { transform: scale(0.96); }
 
 .crystal-btn.primary-prism, .primary-btn.crystal-btn-large {
     background: var(--ios-primary-gradient);
@@ -256,9 +263,7 @@ body.crystal-theme {
     gap: 20px;
 }
 
-.tab-content.active {
-    display: flex;
-}
+.tab-content.active { display: flex; }
 
 .crystal-panel {
     background: var(--ios-glass-bg);
@@ -271,7 +276,7 @@ body.crystal-theme {
     transition: transform 0.25s ease-out, box-shadow 0.3s ease;
 }
 
-/* Liquid Genie Crystal Orb */
+/* Liquid Genie Crystal Orb & Skin Glows */
 .genie-orb-wrap {
     position: relative;
     display: flex;
@@ -286,12 +291,37 @@ body.crystal-theme {
     width: 110px;
     height: 110px;
     border-radius: 50%;
-    background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.5), rgba(0, 242, 254, 0.35) 40%, rgba(192, 132, 252, 0.5) 80%);
     box-shadow: 0 0 45px rgba(0, 242, 254, 0.6), inset 0 -10px 20px rgba(0,0,0,0.5), inset 0 10px 15px rgba(255,255,255,0.7);
     display: flex;
     align-items: center;
     justify-content: center;
     animation: orbFloat 4s ease-in-out infinite;
+    transition: all 0.5s ease;
+}
+
+.crystal-orb.skin-cyan {
+    background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.5), rgba(0, 242, 254, 0.35) 40%, rgba(192, 132, 252, 0.5) 80%);
+    box-shadow: 0 0 45px rgba(0, 242, 254, 0.6);
+}
+
+.crystal-orb.skin-ruby {
+    background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.5), rgba(239, 68, 68, 0.45) 40%, rgba(244, 114, 182, 0.5) 80%);
+    box-shadow: 0 0 45px rgba(239, 68, 68, 0.7);
+}
+
+.crystal-orb.skin-sapphire {
+    background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.5), rgba(59, 130, 246, 0.45) 40%, rgba(147, 51, 234, 0.5) 80%);
+    box-shadow: 0 0 45px rgba(59, 130, 246, 0.7);
+}
+
+.crystal-orb.skin-emerald {
+    background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.5), rgba(16, 185, 129, 0.45) 40%, rgba(52, 211, 153, 0.5) 80%);
+    box-shadow: 0 0 45px rgba(16, 185, 129, 0.7);
+}
+
+.crystal-orb.skin-amethyst {
+    background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.5), rgba(168, 85, 247, 0.45) 40%, rgba(236, 72, 153, 0.5) 80%);
+    box-shadow: 0 0 45px rgba(168, 85, 247, 0.7);
 }
 
 .orb-inner-glow {
@@ -338,19 +368,50 @@ body.crystal-theme {
     box-shadow: 0 8px 25px rgba(0,0,0,0.4);
 }
 
-/* Card Content Styling */
-.game-card {
+/* 🎨 MEME CREATOR STUDIO STYLING */
+.studio-card {
     width: 100%;
-    padding: 38px;
-    text-align: center;
+    padding: 32px;
 }
 
-.welcome-screen {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+.studio-workspace {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
     gap: 20px;
+    margin-top: 20px;
 }
+
+.studio-preview-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.45);
+    border: 1px solid var(--specular-border);
+    border-radius: 22px;
+    padding: 15px;
+    box-shadow: inset 0 0 20px rgba(0,0,0,0.6);
+}
+
+#memeStudioCanvas {
+    width: 100%;
+    height: auto;
+    border-radius: 14px;
+    border: 2px solid var(--specular-border);
+}
+
+.badge-pill {
+    background: rgba(244, 114, 182, 0.2);
+    border: 1px solid rgba(244, 114, 182, 0.4);
+    color: var(--neon-pink);
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+/* Card Content Styling */
+.game-card { width: 100%; padding: 38px; text-align: center; }
+.welcome-screen { display: flex; flex-direction: column; align-items: center; gap: 20px; }
 
 .glow-title.crystal-title {
     font-size: 34px;
@@ -361,12 +422,7 @@ body.crystal-theme {
     -webkit-text-fill-color: transparent;
 }
 
-.subtitle {
-    color: var(--text-secondary);
-    font-size: 15px;
-    line-height: 1.5;
-    max-width: 520px;
-}
+.subtitle { color: var(--text-secondary); font-size: 15px; line-height: 1.5; max-width: 520px; }
 
 .tagline-banner.crystal-banner {
     background: linear-gradient(135deg, rgba(0, 242, 254, 0.18), rgba(244, 114, 182, 0.18));
@@ -378,13 +434,7 @@ body.crystal-theme {
     box-shadow: 0 0 25px rgba(0, 242, 254, 0.3);
 }
 
-.stats-row {
-    display: flex;
-    gap: 12px;
-    flex-wrap: wrap;
-    justify-content: center;
-}
-
+.stats-row { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
 .stat-pill.crystal-pill {
     background: rgba(255, 255, 255, 0.06);
     border: 1px solid var(--specular-border);
@@ -396,217 +446,71 @@ body.crystal-theme {
 }
 
 .action-buttons, .answers-grid {
-    display: flex;
-    gap: 15px;
-    flex-wrap: wrap;
-    justify-content: center;
-    width: 100%;
-    margin-top: 15px;
+    display: flex; gap: 15px; flex-wrap: wrap; justify-content: center; width: 100%; margin-top: 15px;
 }
 
 /* Question & Guess View */
-.question-container, .guess-card-container {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    align-items: center;
-}
-
-.progress-header {
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    font-size: 13px;
-    color: var(--text-secondary);
-}
-
-.progress-bar-bg {
-    width: 100%;
-    height: 8px;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 10px;
-    overflow: hidden;
-}
-
-.progress-bar-fill {
-    height: 100%;
-    background: var(--ios-primary-gradient);
-    width: 0%;
-    transition: width 0.5s ease;
-}
-
-.question-text.crystal-title {
-    font-size: 26px;
-    font-weight: 800;
-    line-height: 1.3;
-}
+.question-container, .guess-card-container { display: flex; flex-direction: column; gap: 20px; align-items: center; }
+.progress-header { width: 100%; display: flex; justify-content: space-between; font-size: 13px; color: var(--text-secondary); }
+.progress-bar-bg { width: 100%; height: 8px; background: rgba(255, 255, 255, 0.1); border-radius: 10px; overflow: hidden; }
+.progress-bar-fill { height: 100%; background: var(--ios-primary-gradient); width: 0%; transition: width 0.5s ease; }
+.question-text.crystal-title { font-size: 26px; font-weight: 800; line-height: 1.3; }
 
 .ans-btn {
-    flex: 1;
-    min-width: 140px;
-    padding: 16px 20px;
-    border-radius: 20px;
-    font-size: 18px;
-    font-weight: 800;
-    border: 1px solid var(--specular-border);
-    border-top: 1px solid var(--specular-light);
-    cursor: pointer;
-    transition: all 0.2s ease;
+    flex: 1; min-width: 140px; padding: 16px 20px; border-radius: 20px; font-size: 18px; font-weight: 800;
+    border: 1px solid var(--specular-border); border-top: 1px solid var(--specular-light); cursor: pointer; transition: all 0.2s ease;
 }
-
 .ans-btn.yes { background: linear-gradient(135deg, #10b981, #059669); color: white; box-shadow: 0 8px 25px rgba(16,185,129,0.4); }
 .ans-btn.no { background: linear-gradient(135deg, #ef4444, #dc2626); color: white; box-shadow: 0 8px 25px rgba(239,68,68,0.4); }
 .ans-btn.skip { background: rgba(255, 255, 255, 0.1); color: #cbd5e1; }
-
 .ans-btn:active { transform: scale(0.95); }
 
 .media-frame {
-    width: 100%;
-    max-width: 480px;
-    max-height: 320px;
-    border-radius: 20px;
-    overflow: hidden;
-    border: 2px solid var(--specular-border);
-    box-shadow: 0 20px 40px rgba(0,0,0,0.6);
-    background: #000;
+    width: 100%; max-width: 480px; max-height: 320px; border-radius: 20px; overflow: hidden;
+    border: 2px solid var(--specular-border); box-shadow: 0 20px 40px rgba(0,0,0,0.6); background: #000;
 }
-
-.media-frame img, .media-frame video {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-}
+.media-frame img, .media-frame video { width: 100%; height: 100%; object-fit: contain; }
 
 /* Match Arena, Friends & Chat Cards */
-.match-arena-card, .friends-card, .chat-container-card {
-    width: 100%;
-    padding: 32px;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-}
+.match-arena-card, .friends-card, .chat-container-card { width: 100%; padding: 32px; display: flex; flex-direction: column; gap: 20px; }
 
 .crystal-input {
     background: rgba(3, 3, 8, 0.65) !important;
     border: 1px solid var(--specular-border) !important;
     border-top: 1px solid var(--specular-light) !important;
-    border-radius: 18px !important;
-    padding: 14px 20px !important;
-    color: white !important;
-    font-size: 15px !important;
-    backdrop-filter: blur(16px) !important;
-    transition: all 0.3s ease !important;
+    border-radius: 18px !important; padding: 14px 20px !important; color: white !important;
+    font-size: 15px !important; backdrop-filter: blur(16px) !important; transition: all 0.3s ease !important;
 }
 
-.crystal-input:focus {
-    border-color: var(--neon-cyan) !important;
-    box-shadow: 0 0 20px var(--neon-cyan) !important;
-    outline: none !important;
-}
+.crystal-input:focus { border-color: var(--neon-cyan) !important; box-shadow: 0 0 20px var(--neon-cyan) !important; outline: none !important; }
 
 .crystal-subpanel {
-    background: var(--ios-glass-subpanel);
-    border: 1px solid var(--specular-border);
-    border-top: 1px solid var(--specular-light);
-    border-radius: 22px;
-    padding: 20px;
+    background: var(--ios-glass-subpanel); border: 1px solid var(--specular-border);
+    border-top: 1px solid var(--specular-light); border-radius: 22px; padding: 20px;
 }
 
-.score-badge {
-    background: var(--ios-gold-gradient);
-    color: #030308;
-    font-weight: 800;
-    padding: 8px 18px;
-    border-radius: 18px;
-    font-size: 14px;
-}
-
-.censor-badge.crystal-censor {
-    background: rgba(16, 185, 129, 0.18);
-    border: 1px solid rgba(16, 185, 129, 0.4);
-    color: #10b981;
-    font-size: 12px;
-    padding: 4px 14px;
-    border-radius: 14px;
-}
-
-.quick-bubble {
-    background: rgba(192, 132, 252, 0.2);
-    border: 1px solid rgba(192, 132, 252, 0.4);
-    color: #e9d5ff;
-    padding: 7px 16px;
-    border-radius: 18px;
-    font-size: 13px;
-    font-weight: 700;
-    cursor: pointer;
-    transition: all 0.2s ease;
-}
-
+.score-badge { background: var(--ios-gold-gradient); color: #030308; font-weight: 800; padding: 8px 18px; border-radius: 18px; font-size: 14px; }
+.censor-badge.crystal-censor { background: rgba(16, 185, 129, 0.18); border: 1px solid rgba(16, 185, 129, 0.4); color: #10b981; font-size: 12px; padding: 4px 14px; border-radius: 14px; }
+.quick-bubble { background: rgba(192, 132, 252, 0.2); border: 1px solid rgba(192, 132, 252, 0.4); color: #e9d5ff; padding: 7px 16px; border-radius: 18px; font-size: 13px; font-weight: 700; cursor: pointer; transition: all 0.2s ease; }
 .quick-bubble:active { transform: scale(0.95); }
 
 .chat-feed.crystal-feed {
-    background: rgba(0, 0, 0, 0.45);
-    border: 1px solid var(--specular-border);
-    border-radius: 20px;
-    padding: 16px;
-    height: 260px;
-    overflow-y: auto;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
+    background: rgba(0, 0, 0, 0.45); border: 1px solid var(--specular-border); border-radius: 20px;
+    padding: 16px; height: 260px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px;
 }
 
-.chat-msg {
-    background: rgba(255, 255, 255, 0.08);
-    padding: 10px 16px;
-    border-radius: 14px;
-    font-size: 14px;
-}
+.chat-msg { background: rgba(255, 255, 255, 0.08); padding: 10px 16px; border-radius: 14px; font-size: 14px; }
 
 /* Modal */
 .modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background: rgba(0, 0, 0, 0.8);
-    backdrop-filter: blur(12px);
-    display: none;
-    align-items: center;
-    justify-content: center;
-    z-index: 999;
+    position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(12px); display: none; align-items: center; justify-content: center; z-index: 999;
 }
-
 .modal-overlay.active { display: flex; }
-
-.modal-content {
-    width: 90%;
-    max-width: 550px;
-    padding: 32px;
-}
-
-.modal-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-}
-
-.close-btn {
-    background: none;
-    border: none;
-    font-size: 28px;
-    color: var(--text-secondary);
-    cursor: pointer;
-}
-
-.app-footer {
-    padding: 24px;
-    font-size: 13px;
-    color: var(--text-secondary);
-    text-align: center;
-}
+.modal-content { width: 90%; max-width: 550px; padding: 32px; }
+.modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+.close-btn { background: none; border: none; font-size: 28px; color: var(--text-secondary); cursor: pointer; }
+.app-footer { padding: 24px; font-size: 13px; color: var(--text-secondary); text-align: center; }
 
 /* Keyframes */
 @keyframes orbFloat { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-10px); } }

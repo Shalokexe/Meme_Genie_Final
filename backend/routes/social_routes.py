@@ -2,11 +2,11 @@ from fastapi import APIRouter, HTTPException, Query
 from typing import List, Optional
 from models.user_model import (
     UserProfile, FriendRequest, FriendRequestCreate, FriendRequestAction,
-    ChatMessage, SendChatMessageRequest, MatchRoomCreate, MatchJoinRequest, MatchGuessSubmit
+    ChatMessage, SendChatMessageRequest, MatchRoomCreate, MatchJoinRequest, MatchGuessSubmit, SkinEquipRequest
 )
 from friend_engine import (
     get_or_create_user, send_friend_request, handle_friend_request,
-    get_user_friends, get_pending_requests, USERS_DB
+    get_user_friends, get_pending_requests, equip_skin, award_user_xp, USERS_DB
 )
 from chat_engine import (
     post_chat_message, get_room_messages, QUICK_CHAT_PRESETS
@@ -29,6 +29,18 @@ def get_profile(user_id: str):
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
     return user
+
+@router.post("/user/equip-skin")
+def equip_user_skin(req: SkinEquipRequest):
+    success = equip_skin(req.user_id, req.skin_name)
+    if success:
+        return {"status": "success", "active_skin": req.skin_name}
+    raise HTTPException(status_code=400, detail="Invalid skin or user not found")
+
+@router.post("/user/award-xp")
+def grant_xp(user_id: str = Query(...), xp_amount: int = Query(50), badge: Optional[str] = Query(None)):
+    user = award_user_xp(user_id, xp_amount, badge)
+    return {"status": "success", "user": user}
 
 # --- Friend Request Endpoints ---
 @router.post("/friends/request")
@@ -61,6 +73,8 @@ def list_quick_presets():
 @router.post("/chat/send")
 def send_message(req: SendChatMessageRequest):
     msg = post_chat_message(req.room_id, req.user_id, req.username, req.message, req.is_quick_chat)
+    # Award XP for chat interaction
+    award_user_xp(req.user_id, 10)
     return {"status": "sent", "message": msg}
 
 @router.get("/chat/messages/{room_id}")
@@ -93,4 +107,6 @@ def fetch_match_state(room_code: str):
 @router.post("/match/guess")
 def process_match_guess(req: MatchGuessSubmit):
     res = submit_match_guess(req.room_code, req.user_id, req.guess_text, req.seconds_taken)
+    if res.get("correct"):
+        award_user_xp(req.user_id, 100, "Fastest Fingers")
     return res
