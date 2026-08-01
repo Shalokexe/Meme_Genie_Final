@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Meme Genie 🧞‍♂️ | Liquid Crystal & Meme Studio Edition</title>
+    <title>Meme Genie 🧞‍♂️ | Liquid Crystal & RAG Web Engine</title>
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -38,10 +38,11 @@
     <!-- iOS Segmented Control Tabs -->
     <nav class="nav-tabs-container crystal-nav">
         <button class="nav-tab crystal-tab active" id="tabGenie" onclick="switchTab('genie')">🔮 Genie Reader</button>
+        <button class="nav-tab crystal-tab" id="tabRag" onclick="switchTab('rag')">🔍 Web RAG Search</button>
         <button class="nav-tab crystal-tab" id="tabStudio" onclick="switchTab('studio')">🎨 Meme Studio</button>
         <button class="nav-tab crystal-tab" id="tabArena" onclick="switchTab('arena')">⚔️ 5-Round Match</button>
         <button class="nav-tab crystal-tab" id="tabFriends" onclick="switchTab('friends')">👥 Friends</button>
-        <button class="nav-tab crystal-tab" id="tabChat" onclick="switchTab('chat')">💬 Among Us Chat</button>
+        <button class="nav-tab crystal-tab" id="tabChat" onclick="switchTab('chat')">💬 Genie Chat</button>
     </nav>
 
     <main class="main-container">
@@ -83,7 +84,28 @@
             </div>
         </div>
 
-        <!-- 2. MEME CREATOR STUDIO TAB -->
+        <!-- 2. FREE RAG WEB SEARCH TAB -->
+        <div class="tab-content" id="viewRag">
+            <div class="crystal-panel rag-card tilt-card" style="width:100%; padding:32px;">
+                <div class="rag-header">
+                    <h2 class="crystal-title">🔍 Free Web RAG Search Engine</h2>
+                    <p class="subtitle">Search any meme, catchphrase, or viral trend live from the web for free!</p>
+                </div>
+
+                <div class="rag-search-bar" style="display:flex; gap:12px; margin-top:20px;">
+                    <input type="text" id="ragQueryInput" class="crystal-input" placeholder="Type meme name, origin, or catchphrase (e.g. Gigachad, Doge, Rickroll)..." style="flex:1;" onkeypress="if(event.key==='Enter') searchWebMemes()">
+                    <button class="primary-btn crystal-btn" onclick="searchWebMemes()">🌐 Search Web</button>
+                </div>
+
+                <div id="ragResultsArea" class="rag-results-container" style="margin-top:20px;">
+                    <div class="crystal-subpanel" style="text-align:center; padding:30px;">
+                        <p style="color:var(--text-secondary);">Enter a meme term above to perform live RAG web search retrieval!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3. MEME CREATOR STUDIO TAB -->
         <div class="tab-content" id="viewStudio">
             <div class="crystal-panel studio-card tilt-card">
                 <div class="studio-header">
@@ -135,7 +157,7 @@
             </div>
         </div>
 
-        <!-- 3. 5-ROUND MATCH ARENA TAB -->
+        <!-- 4. 5-ROUND MATCH ARENA TAB -->
         <div class="tab-content" id="viewArena">
             <div class="crystal-panel match-arena-card tilt-card">
                 <div class="arena-header">
@@ -180,7 +202,7 @@
             </div>
         </div>
 
-        <!-- 4. FRIENDS TAB -->
+        <!-- 5. FRIENDS TAB -->
         <div class="tab-content" id="viewFriends">
             <div class="crystal-panel friends-card tilt-card">
                 <h2 class="crystal-title">👥 Friends & Requests</h2>
@@ -207,11 +229,11 @@
             </div>
         </div>
 
-        <!-- 5. AMONG US CHAT TAB -->
+        <!-- 6. GENIE QUICK CHAT TAB -->
         <div class="tab-content" id="viewChat">
             <div class="crystal-panel chat-container-card tilt-card">
                 <div class="chat-header" style="display:flex; justify-content:space-between; align-items:center;">
-                    <h2 class="crystal-title">💬 Among Us Style Chat</h2>
+                    <h2 class="crystal-title">💬 Genie Quick Chat</h2>
                     <span class="censor-badge crystal-censor">🧼 Profanity Filter Active</span>
                 </div>
 

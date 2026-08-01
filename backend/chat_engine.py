@@ -1,5 +1,5 @@
 """
-Among Us Style Chat Engine with Profanity Censorship & Quick Chat Presets
+Meme Genie Quick Chat Engine with Profanity Censorship & Presets
 """
 
 import time
@@ -16,7 +16,7 @@ RESTRICTED_WORDS = [
 ]
 
 QUICK_CHAT_PRESETS = [
-    "Sus... 🧐",
+    "Mind Blown! 🤯",
     "I got it! ⚡",
     "Fastest meme in the west! 🤠",
     "Who guessed that?! 😱",

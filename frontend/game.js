@@ -1,8 +1,8 @@
 /**
- * Meme Genie 🧞‍♂️ - iPhone Liquid Crystal & Meme Studio Edition Engine
+ * Meme Genie 🧞‍♂️ - Liquid Crystal & RAG Web Search Edition Engine
  * "MADE BY MEMERS, MADE FOR MEMERS"
- * Features HTML5 Canvas Meme Creator Studio, WebSockets Real-Time Sync,
- * XP Leveling & Crystal Skins, Web Speech API & Sound Synthesizer.
+ * Features Free RAG Web Search Engine, HTML5 Canvas Meme Creator Studio,
+ * WebSockets Real-Time Sync, XP Leveling & Crystal Skins.
  */
 
 const API_BASE = "http://127.0.0.1:8000/api";
@@ -127,7 +127,7 @@ function init3DCrystalTilt() {
     });
 }
 
-// Web Audio API Synthesizer (iOS Tactile Click & Victory Fanfare)
+// Web Audio API Synthesizer
 let audioCtx = null;
 function getAudioContext() {
     if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -178,6 +178,9 @@ function switchTab(tabName) {
     if (tabName === 'genie') {
         document.getElementById("tabGenie").classList.add("active");
         document.getElementById("viewGenie").classList.add("active");
+    } else if (tabName === 'rag') {
+        document.getElementById("tabRag").classList.add("active");
+        document.getElementById("viewRag").classList.add("active");
     } else if (tabName === 'studio') {
         document.getElementById("tabStudio").classList.add("active");
         document.getElementById("viewStudio").classList.add("active");
@@ -260,6 +263,79 @@ async function saveUserProfile(e) {
     }
 }
 
+// --- 🔍 FREE RAG WEB SEARCH ENGINE ---
+async function searchWebMemes() {
+    const input = document.getElementById("ragQueryInput");
+    const query = input.value.trim();
+    if (!query) return;
+
+    playMagicSound('click');
+    const container = document.getElementById("ragResultsArea");
+    container.innerHTML = `<div class="crystal-subpanel" style="text-align:center; padding:25px;"><p>🌐 Searching live web for meme '${query}' via RAG Engine...</p></div>`;
+
+    try {
+        const res = await fetch(`${API_BASE}/rag/search?query=${encodeURIComponent(query)}`);
+        const data = await res.json();
+        renderRagResults(data);
+    } catch (e) {
+        container.innerHTML = `<div class="crystal-subpanel" style="text-align:center; padding:25px; color:#ef4444;"><p>Error connecting to RAG web engine.</p></div>`;
+    }
+}
+
+function renderRagResults(data) {
+    const container = document.getElementById("ragResultsArea");
+    const meme = data.meme;
+    const sources = data.sources || [];
+
+    const sourcesHTML = sources.map(s => `
+        <div style="background:rgba(255,255,255,0.05); padding:8px 12px; border-radius:10px; margin-top:6px; font-size:12px;">
+            <a href="${s.link}" target="_blank" style="color:var(--neon-cyan); font-weight:700; text-decoration:none;">🔗 ${s.title}</a>
+            <p style="color:var(--text-secondary); margin-top:2px;">${s.snippet}</p>
+        </div>
+    `).join("");
+
+    container.innerHTML = `
+        <div class="crystal-subpanel" style="display:flex; flex-direction:column; gap:15px;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+                <span class="censor-badge" style="background:rgba(0,242,254,0.15); color:var(--neon-cyan);">🤖 Source: ${data.rag_source}</span>
+                <button class="primary-btn crystal-btn" style="padding:6px 16px; font-size:13px;" onclick='importRagMeme(${JSON.stringify(meme)})'>📥 Import to Genie Memory</button>
+            </div>
+
+            <div style="display:flex; gap:20px; flex-wrap:wrap; align-items:center;">
+                <div class="media-frame" style="max-width:260px; max-height:180px;">
+                    <img src="${meme.media_url}" alt="${meme.name}">
+                </div>
+                <div style="flex:1;">
+                    <h2 class="crystal-title" style="font-size:24px;">${meme.name}</h2>
+                    <p style="color:#cbd5e1; font-size:14px; margin-top:6px;">${meme.description}</p>
+                    <div style="margin-top:10px; display:flex; gap:6px; flex-wrap:wrap;">
+                        ${(meme.tags || []).map(t => `<span class="quote-tag" style="background:rgba(192,132,252,0.2); color:var(--neon-purple); font-size:11px;">#${t}</span>`).join(" ")}
+                    </div>
+                </div>
+            </div>
+
+            <div style="margin-top:10px;">
+                <h4 style="font-size:14px; color:var(--text-secondary);">🌐 Retrieved Web Sources:</h4>
+                ${sourcesHTML || '<p style="font-size:12px; color:var(--text-secondary);">Web sources indexed.</p>'}
+            </div>
+        </div>
+    `;
+}
+
+async function importRagMeme(memeObj) {
+    try {
+        const res = await fetch(`${API_BASE}/rag/import`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(memeObj)
+        });
+        if (res.ok) {
+            alert(`✅ '${memeObj.name}' imported into Genie Memory!`);
+            playMagicSound('victory');
+        }
+    } catch (e) { alert("Failed to import meme."); }
+}
+
 // --- 🎨 IN-APP MEME CREATOR STUDIO ---
 function updateStudioMemeCanvas() {
     const canvas = document.getElementById("memeStudioCanvas");
@@ -285,11 +361,9 @@ function updateStudioMemeCanvas() {
         ctx.strokeStyle = "#000000";
         ctx.lineWidth = Math.max(3, fontSize / 8);
 
-        // Draw Top Text
         ctx.strokeText(topText, canvas.width / 2, parseInt(fontSize) + 15);
         ctx.fillText(topText, canvas.width / 2, parseInt(fontSize) + 15);
 
-        // Draw Bottom Text
         ctx.strokeText(bottomText, canvas.width / 2, canvas.height - 20);
         ctx.fillText(bottomText, canvas.width / 2, canvas.height - 20);
     };
@@ -319,7 +393,6 @@ async function publishStudioMeme() {
         if (res.ok) {
             alert("🚀 1-Click Published! Your meme is now inside Genie's Memory!");
             playMagicSound('victory');
-            // Award XP for creating meme
             await fetch(`${API_BASE}/user/award-xp?user_id=${currentUser.user_id}&xp_amount=50&badge=Meme%20Picasso`, { method: "POST" });
             syncUserProfile();
         }
@@ -346,14 +419,13 @@ function initMatchWebSocket(roomCode) {
         matchWebSocket.onopen = () => console.log("⚡ WebSockets Connected to Room:", roomCode);
         matchWebSocket.onmessage = (event) => {
             const data = JSON.parse(event.data);
-            console.log("⚡ WS Event:", data);
             pollMatchState();
         };
         matchWebSocket.onerror = (err) => console.warn("WebSocket Error:", err);
     } catch (e) {}
 }
 
-// --- AMONG US STYLE CHAT & PROFANITY FILTER ---
+// --- GENIE QUICK CHAT & PROFANITY FILTER ---
 async function fetchQuickChatPresets() {
     try {
         const res = await fetch(`${API_BASE}/chat/quick-presets`);

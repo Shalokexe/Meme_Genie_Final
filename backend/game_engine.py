@@ -1,5 +1,5 @@
 """
-Meme Genie Akinator-Style Scoring Engine
+Meme Genie Tag-Scoring & Mind-Reading Engine
 Handles session state management, tag-matching score calculations,
 confidence estimation, and candidate rank selection.
 """

@@ -65,7 +65,7 @@ def list_friends(user_id: str):
     pending = get_pending_requests(user_id)
     return {"friends": friends, "pending_requests": pending}
 
-# --- Among Us Chat Endpoints ---
+# --- Genie Quick Chat Endpoints ---
 @router.get("/chat/quick-presets")
 def list_quick_presets():
     return {"presets": QUICK_CHAT_PRESETS}
