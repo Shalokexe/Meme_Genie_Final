@@ -1,8 +1,8 @@
 /**
- * Meme Genie 🧞‍♂️ - Liquid Crystal & RAG Web Search Edition Engine
+ * Meme Genie 🧞‍♂️ - Liquid Crystal & Soundboard Edition (v4.0.0-Beta)
  * "MADE BY MEMERS, MADE FOR MEMERS"
- * Features Free RAG Web Search Engine, HTML5 Canvas Meme Creator Studio,
- * WebSockets Real-Time Sync, XP Leveling & Crystal Skins.
+ * Features Web Audio Meme Soundboard, Genie Personalities, Global Leaderboard,
+ * Daily Challenge, Free RAG Web Search Engine, Meme Studio & WebSockets.
  */
 
 const API_BASE = "http://127.0.0.1:8000/api";
@@ -18,6 +18,7 @@ let currentUser = {
     active_skin: "cyan"
 };
 
+let currentGeniePersonality = "classic"; // 'classic', 'sassy', 'hypebeast', 'boomer'
 let currentSessionId = null;
 let activeMatchRoomCode = null;
 let matchRoundStartTime = null;
@@ -127,7 +128,7 @@ function init3DCrystalTilt() {
     });
 }
 
-// Web Audio API Synthesizer
+// Web Audio API Synthesizer & Meme Soundboard Engine
 let audioCtx = null;
 function getAudioContext() {
     if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -169,6 +170,92 @@ function playMagicSound(type) {
     } catch (e) {}
 }
 
+function playMemeFx(fxName) {
+    if (!soundEnabled) return;
+    try {
+        const ctx = getAudioContext();
+        const now = ctx.currentTime;
+
+        if (fxName === 'vineboom') {
+            // Vine Boom Sub-Bass Drop
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            osc.type = 'sawtooth';
+            osc.frequency.setValueAtTime(130, now);
+            osc.frequency.exponentialRampToValueAtTime(30, now + 0.6);
+            gain.gain.setValueAtTime(0.6, now);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.6);
+            osc.start(now);
+            osc.stop(now + 0.6);
+        } else if (fxName === 'bruh') {
+            // Bruh Pitch Tone
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(220, now);
+            osc.frequency.linearRampToValueAtTime(110, now + 0.4);
+            gain.gain.setValueAtTime(0.4, now);
+            gain.gain.exponentialRampToValueAtTime(0.01, now + 0.4);
+            osc.start(now);
+            osc.stop(now + 0.4);
+        } else if (fxName === 'airhorn') {
+            // Multi-note Airhorn Burst
+            [466.16, 466.16, 466.16, 622.25].forEach((freq, idx) => {
+                const o = ctx.createOscillator();
+                const g = ctx.createGain();
+                o.connect(g);
+                g.connect(ctx.destination);
+                o.type = 'square';
+                const startTime = now + (idx * 0.08);
+                o.frequency.setValueAtTime(freq, startTime);
+                g.gain.setValueAtTime(0.2, startTime);
+                g.gain.exponentialRampToValueAtTime(0.01, startTime + 0.07);
+                o.start(startTime);
+                o.stop(startTime + 0.07);
+            });
+        } else if (fxName === 'sadviolin') {
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(440, now);
+            osc.frequency.linearRampToValueAtTime(415, now + 0.8);
+            gain.gain.setValueAtTime(0.25, now);
+            gain.gain.exponentialRampToValueAtTime(0.01, now + 0.8);
+            osc.start(now);
+            osc.stop(now + 0.8);
+        } else if (fxName === 'braww') {
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            osc.type = 'sawtooth';
+            osc.frequency.setValueAtTime(300, now);
+            osc.frequency.exponentialRampToValueAtTime(80, now + 0.3);
+            gain.gain.setValueAtTime(0.35, now);
+            gain.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
+            osc.start(now);
+            osc.stop(now + 0.3);
+        }
+    } catch (e) {}
+}
+
+// Genie Personality System
+function changeGeniePersonality(val) {
+    currentGeniePersonality = val;
+    playMagicSound('click');
+    const avatar = document.getElementById("genieAvatar");
+    if (val === 'sassy') avatar.innerText = "💅";
+    else if (val === 'hypebeast') avatar.innerText = "🧢";
+    else if (val === 'boomer') avatar.innerText = "👓";
+    else avatar.innerText = "🧞‍♂️";
+}
+
 // Tab Navigation Controls
 function switchTab(tabName) {
     playMagicSound('click');
@@ -178,6 +265,10 @@ function switchTab(tabName) {
     if (tabName === 'genie') {
         document.getElementById("tabGenie").classList.add("active");
         document.getElementById("viewGenie").classList.add("active");
+    } else if (tabName === 'leaderboard') {
+        document.getElementById("tabLeaderboard").classList.add("active");
+        document.getElementById("viewLeaderboard").classList.add("active");
+        fetchGlobalLeaderboard();
     } else if (tabName === 'rag') {
         document.getElementById("tabRag").classList.add("active");
         document.getElementById("viewRag").classList.add("active");
@@ -261,6 +352,35 @@ async function saveUserProfile(e) {
         closeProfileModal();
         alert("✅ Profile & Skin updated! Welcome " + currentUser.username);
     }
+}
+
+// --- 📊 GLOBAL LEADERBOARD & DAILY CHALLENGE ---
+async function fetchGlobalLeaderboard() {
+    try {
+        const res = await fetch(`${API_BASE}/leaderboard/global`);
+        const data = await res.json();
+        const tbody = document.getElementById("globalLeaderboardBody");
+        if (data.leaderboard && data.leaderboard.length > 0) {
+            tbody.innerHTML = data.leaderboard.map(u => `
+                <tr style="border-bottom:1px solid rgba(255,255,255,0.06);">
+                    <td style="padding:12px; font-weight:800; color:var(--neon-gold);">#${u.rank}</td>
+                    <td style="padding:12px;">${u.avatar_emoji} <strong>${u.username}</strong></td>
+                    <td style="padding:12px; text-align:center; font-weight:700;">Lvl ${u.level}</td>
+                    <td style="padding:12px; text-align:center; color:var(--neon-cyan); font-weight:800;">${u.xp} XP</td>
+                    <td style="padding:12px; text-align:right;">${(u.badges || []).map(b => `<span class="badge-pill" style="font-size:10px;">${b}</span>`).join(" ")}</td>
+                </tr>
+            `).join("");
+        }
+    } catch (e) {}
+}
+
+async function startDailyChallenge() {
+    try {
+        const res = await fetch(`${API_BASE}/challenge/daily`);
+        const data = await res.json();
+        alert(`📅 Starting ${data.challenge_name}! Guess all 3 memes correctly to claim +200 Bonus XP!`);
+        startGame();
+    } catch (e) {}
 }
 
 // --- 🔍 FREE RAG WEB SEARCH ENGINE ---
@@ -686,7 +806,21 @@ async function fetchNextQuestion() {
 }
 
 function renderQuestion(data) {
-    setGenieMood("asking", "Consulting the meme spirits...", "🤔");
+    let moodText = "Consulting the meme spirits...";
+    let emoji = "🤔";
+
+    if (currentGeniePersonality === 'sassy') {
+        moodText = "Ugh, making me work hard today...";
+        emoji = "💅";
+    } else if (currentGeniePersonality === 'hypebeast') {
+        moodText = "YO! Let me cook real quick!!";
+        emoji = "🧢";
+    } else if (currentGeniePersonality === 'boomer') {
+        moodText = "Back in my day memes were simple images...";
+        emoji = "👓";
+    }
+
+    setGenieMood("asking", moodText, emoji);
     const area = document.getElementById("gameArea");
     area.innerHTML = `
         <div class="question-container">

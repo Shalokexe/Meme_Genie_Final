@@ -1,45 +1,44 @@
-# Meme Genie 🧞‍♂️
+# Meme Genie 🧞‍♂️ - v4.0.0-Beta Edition
 
 > **"MADE BY MEMERS, MADE FOR MEMERS"** 🔥
 
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.100+-009688.svg?style=flat&logo=fastapi)](https://fastapi.tiangolo.com/)
 [![Python](https://img.shields.io/badge/Python-3.10+-3776AB.svg?style=flat&logo=python)](https://www.python.org/)
 [![MongoDB](https://img.shields.io/badge/MongoDB-4.4+-47A248.svg?style=flat&logo=mongodb)](https://www.mongodb.com/)
+[![Beta Version](https://img.shields.io/badge/Release-v4.0.0--Beta-purple.svg)](https://github.com/Shalokexe/Meme_Genie_Final)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
-**Meme Genie** is an interactive, full-stack meme-guessing platform, Web RAG engine, and multiplayer arena. Combining an **AI mind-reading engine**, an **iPhone / iOS Liquid Crystal UI**, a **Free RAG Web Search Engine**, **Genie Quick Chat with profanity censorship**, a **Friend Request system**, and **5-Round competitive speed guessing matches**, Meme Genie delivers the ultimate meme trivia experience.
+**Meme Genie** is an interactive, full-stack meme-guessing platform, Web RAG engine, and multiplayer arena. Combining an **AI mind-reading engine**, an **iPhone / iOS Liquid Crystal UI**, **Meme Audio Soundboard**, **Genie Personalities**, **Global Leaderboards**, **Free RAG Web Search Engine**, **Genie Quick Chat with profanity censorship**, a **Friend Request system**, and **5-Round competitive speed guessing matches**, Meme Genie delivers the ultimate meme trivia experience.
 
 ---
 
-## ✨ Features at a Glance
+## ✨ Beta Features (v4.0.0-Beta)
+
+### 🔊 Meme Audio Soundboard & Genie Personalities
+- **Web Audio Sound FX**: Synthesizes iconic meme sounds directly in the browser (*Vine Boom 💥*, *Bruh 🗿*, *Airhorn 🎺*, *Sad Violin 🎻*, *Braww 🐕*).
+- **Genie Vibe Personalities**: Choose Genie's mood (*Classic 🧞‍♂️*, *Sassy 💅*, *Hypebeast 🧢*, *Boomer 👓*).
+
+### 📊 Global Leaderboard & Daily Trivia Challenge
+- **Daily Meme Dash**: Guess 3 memes as fast as possible to claim +200 Bonus XP.
+- **Global Public Leaderboard**: Ranks top memers worldwide by XP and Level.
 
 ### 🔮 Single-Player Genie Reader
-- **Genie Mind-Reading Engine**: Asks strategic binary trait questions (music, old classic, trolling, global popularity, dialogue, animal, cartoon/anime, gaming, reaction face).
+- **Genie Mind-Reading Engine**: Asks strategic binary trait questions.
 - **Dynamic Candidate Splitting**: Calculates tag entropy to narrow down candidate memes.
 - **Real-Time Confidence Indicator**: Tracks Genie's mind-reading confidence percentage (0% – 100%).
-- **Web Speech Voice Control**: Built-in speech synthesis (Genie talking questions) and voice recognition (listening to user answers).
 
 ### 🔍 Free RAG Web Search Engine
 - **Live Internet Retrieval**: Search any meme, catchphrase, or viral trend live from the web for free.
-- **Grok AI (xAI API) & Free Provider Fallback**: Uses free web search scrapers + Grok AI API fallback (`GROK_API_KEY`).
-- **1-Click Publishing to Genie Memory**: Import live web search results straight into the Genie Mind Memory.
+- **Grok AI & Free Provider Fallback**: Uses free web search scrapers + Grok AI API fallback (`GROK_API_KEY`).
+- **1-Click Publishing to Genie Memory**: Import live web search results straight into Genie Memory.
 
 ### 🎨 In-App Meme Creator Studio
-- **HTML5 Canvas Meme Editor**: Custom top & bottom text with classic bold meme typography (white text with black stroke).
+- **HTML5 Canvas Meme Editor**: Custom top & bottom text with classic bold meme typography.
 - **1-Click Publishing & PNG Download**: Export customized memes to your device or publish to Genie memory.
 
 ### ⚔️ 5-Round Speed Match Arena
 - **Competitive Friend Matches**: Host or join 5-round game rooms via room code (e.g. `ROOM-777`).
 - **WebSockets Real-Time Sync**: Instant zero-latency player join alerts, speed guess submissions, and synchronized round advancement.
-- **Speed-Based Scoring**: Points awarded based on speed (`100 base pts + time bonus + 50 pt first-guesser bonus`).
-
-### 💬 Genie Quick Chat (with Profanity Filter)
-- **Quick Chat Wheel**: One-tap pre-set bubbles (*"Mind Blown! 🤯"*, *"I got it! ⚡"*, *"Fastest meme in the west! 🤠"*, *"Who guessed that?! 😱"*, *"GG! 🎮"*).
-- **Automated Profanity Filter**: Sanitizes restricted words into `🧼[MEME SANITIZED]`.
-
-### 👥 Friend Request System & Crystal Skins
-- **Memer Handles & Avatars**: Custom handles with avatars (🗿 GigaChad, 🐕 Doge, 🐸 Pepe, 😎 Cool Memer).
-- **Player XP & Badges**: Earn XP to level up, earn badges, and unlock custom **Crystal Orb Skins** (💎 Diamond Cyan, 🔴 Ruby Red, 🔵 Sapphire Blue, 🟢 Emerald Green, 🟣 Amethyst Purple).
 
 ---
 
@@ -48,7 +47,7 @@
 ```
 Meme_Genie_Final/
 ├── backend/
-│   ├── main.py              # FastAPI app, CORSMiddleware, static route mounting
+│   ├── main.py              # FastAPI app (v4.0.0-Beta), CORSMiddleware, static route mounting
 │   ├── game_engine.py       # Single-player tag-scoring engine & session memory
 │   ├── rag_engine.py        # Free RAG Web Search Engine & Grok AI integration
 │   ├── chat_engine.py       # Genie Quick Chat engine & profanity sanitization
@@ -65,12 +64,12 @@ Meme_Genie_Final/
 │       ├── game_routes.py   # Game API routes (/start, /question, /answer)
 │       ├── rag_routes.py    # Free RAG Web Search API routes (/rag/search, /rag/import)
 │       ├── social_routes.py # Social API routes (/user, /friends, /chat, /match)
+│       ├── leaderboard_routes.py # Global Leaderboard & Daily Challenge routes
 │       └── websocket_routes.py # WebSockets real-time match room broadcaster (/ws/match)
 ├── frontend/
-│   ├── index.html           # iOS Liquid Crystal layout, Genie Crystal Orb & RAG tab
-│   ├── style.css            # Specular glass tokens, squircle cards & skin orb themes
-│   └── game.js              # HTML5 particle canvas engine, Meme Studio, WebSockets & RAG handlers
-├── .gitignore               # Excludes bytecode & cache files
+│   ├── index.html           # iOS Liquid Crystal layout, Soundboard, Leaderboard & RAG tab
+│   ├── style.css            # Specular glass tokens, soundboard buttons & skin orb themes
+│   └── game.js              # Soundboard synth, Genie personalities, WebSockets & RAG handlers
 ├── README.md                # Project documentation
 └── WORKSCRIPT.md            # Active project log & roadmap
 ```
@@ -78,10 +77,6 @@ Meme_Genie_Final/
 ---
 
 ## ⚡ Quickstart Guide
-
-### Prerequisites
-- Python 3.10+
-- (Optional) MongoDB running on `mongodb://localhost:27017/` (*If MongoDB is offline, Meme Genie seamlessly uses its embedded seed memory dataset!*)
 
 ### 1. Install Dependencies
 ```bash
@@ -98,32 +93,6 @@ Open your browser and navigate to:
 ```
 http://127.0.0.1:8000/
 ```
-
----
-
-## 📡 API Overview
-
-| Method | Endpoint | Description |
-| :--- | :--- | :--- |
-| `GET` | `/api/health` | Diagnostic connection status & meme count |
-| `POST` | `/api/start` | Creates a new game session with a unique UUID |
-| `GET` | `/api/question` | Fetches next optimal question or final guess payload |
-| `POST` | `/api/answer` | Submits Yes/No/Skip answer & updates candidate weights |
-| `GET` | `/api/rag/search` | Performs Free RAG Web Search retrieval for memes |
-| `POST` | `/api/rag/import` | Imports web search meme result directly into Genie Memory |
-| `GET` | `/api/memes` | Retrieves all loaded memes |
-| `POST` | `/api/memes` | Submits a new meme into database |
-| `POST` | `/api/user/profile` | Registers or loads user profile handle |
-| `POST` | `/api/user/equip-skin`| Equips a custom Crystal Orb skin |
-| `POST` | `/api/friends/request` | Sends friend request to target username |
-| `POST` | `/api/friends/action` | Accepts or declines pending friend request |
-| `GET` | `/api/friends/list/{id}`| Lists online friends & pending requests |
-| `POST` | `/api/chat/send` | Sends chat message (auto-sanitizes profanity) |
-| `GET` | `/api/chat/messages/{room}`| Fetches room chat message feed |
-| `POST` | `/api/match/create` | Hosts a new 5-Round Match Room |
-| `POST` | `/api/match/join` | Joins a match room by code |
-| `POST` | `/api/match/guess` | Submits a speed guess & awards points |
-| `WS` | `/api/ws/match/{room}/{uid}`| WebSockets real-time match room stream |
 
 ---
 

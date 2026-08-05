@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Meme Genie 🧞‍♂️ | Liquid Crystal & RAG Web Engine</title>
+    <title>Meme Genie 🧞‍♂️ | v4.0.0-Beta Edition</title>
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
 </head>
-<body class="crystal-theme">
+<body class="crystal-theme theme-cyan">
     <!-- Dynamic HTML5 Crystal Particle Canvas -->
     <canvas id="crystalCanvas"></canvas>
 
@@ -19,11 +19,22 @@
             <div class="crystal-gem-icon">💎</div>
             <span class="genie-icon">🧞‍♂️</span>
             <div class="logo-stack">
-                <span class="logo-text">Meme Genie</span>
+                <div style="display:flex; align-items:center; gap:8px;">
+                    <span class="logo-text">Meme Genie</span>
+                    <span class="beta-tag">v4.0.0-Beta</span>
+                </div>
                 <span class="tagline-badge prism-badge">MADE BY MEMERS, MADE FOR MEMERS 🔥</span>
             </div>
         </div>
         <div class="header-actions">
+            <!-- Genie Personality Selector -->
+            <select id="geniePersonalitySelect" class="crystal-input-sm" onchange="changeGeniePersonality(this.value)">
+                <option value="classic">🧞‍♂️ Classic Genie</option>
+                <option value="sassy">💅 Sassy Genie</option>
+                <option value="hypebeast">🧢 Hypebeast Genie</option>
+                <option value="boomer">👓 Boomer Genie</option>
+            </select>
+
             <div class="user-level-badge" id="userLevelBadge">Lvl <span id="hdrLevel">1</span></div>
             <button id="userProfileBtn" class="crystal-btn secondary" onclick="openProfileModal()">
                 <span id="userAvatar">😎</span> <span id="userNameLabel">Guest</span>
@@ -35,9 +46,20 @@
         </div>
     </header>
 
+    <!-- Soundboard Floating Bar -->
+    <div class="soundboard-bar">
+        <span class="soundboard-title">🔊 Soundboard:</span>
+        <button class="sound-fx-btn" onclick="playMemeFx('vineboom')">💥 Vine Boom</button>
+        <button class="sound-fx-btn" onclick="playMemeFx('bruh')">🗿 Bruh</button>
+        <button class="sound-fx-btn" onclick="playMemeFx('airhorn')">🎺 Airhorn</button>
+        <button class="sound-fx-btn" onclick="playMemeFx('sadviolin')">🎻 Sad Violin</button>
+        <button class="sound-fx-btn" onclick="playMemeFx('braww')">🐕 Braww</button>
+    </div>
+
     <!-- iOS Segmented Control Tabs -->
     <nav class="nav-tabs-container crystal-nav">
         <button class="nav-tab crystal-tab active" id="tabGenie" onclick="switchTab('genie')">🔮 Genie Reader</button>
+        <button class="nav-tab crystal-tab" id="tabLeaderboard" onclick="switchTab('leaderboard')">📊 Leaderboard</button>
         <button class="nav-tab crystal-tab" id="tabRag" onclick="switchTab('rag')">🔍 Web RAG Search</button>
         <button class="nav-tab crystal-tab" id="tabStudio" onclick="switchTab('studio')">🎨 Meme Studio</button>
         <button class="nav-tab crystal-tab" id="tabArena" onclick="switchTab('arena')">⚔️ 5-Round Match</button>
@@ -84,7 +106,42 @@
             </div>
         </div>
 
-        <!-- 2. FREE RAG WEB SEARCH TAB -->
+        <!-- 2. GLOBAL LEADERBOARD & DAILY TRIVIA TAB -->
+        <div class="tab-content" id="viewLeaderboard">
+            <div class="crystal-panel leaderboard-card tilt-card" style="width:100%; padding:32px;">
+                <div class="lb-header" style="display:flex; justify-content:space-between; align-items:center;">
+                    <div>
+                        <h2 class="crystal-title">📊 Global Public Leaderboard</h2>
+                        <p class="subtitle">Top memers worldwide ranked by Level & XP!</p>
+                    </div>
+                    <button class="primary-btn crystal-btn" onclick="startDailyChallenge()">🎯 Play Daily Dash (+200 XP)</button>
+                </div>
+
+                <div class="daily-banner crystal-subpanel" style="margin-top:20px; text-align:center; background:linear-gradient(135deg, rgba(251,191,36,0.15), rgba(244,114,182,0.15));">
+                    <h3 style="color:var(--neon-gold);">📅 Today's Daily Meme Dash</h3>
+                    <p style="font-size:14px; color:var(--text-secondary); margin-top:4px;">Guess 3 memes as fast as possible to claim +200 Bonus XP!</p>
+                </div>
+
+                <div class="leaderboard-table-wrap" style="margin-top:20px;">
+                    <table class="lb-table" style="width:100%; border-collapse:collapse;">
+                        <thead>
+                            <tr style="color:var(--neon-cyan); border-bottom:1px solid var(--specular-border); font-size:14px;">
+                                <th style="padding:10px; text-align:left;">Rank</th>
+                                <th style="padding:10px; text-align:left;">Memer</th>
+                                <th style="padding:10px; text-align:center;">Level</th>
+                                <th style="padding:10px; text-align:center;">Total XP</th>
+                                <th style="padding:10px; text-align:right;">Badges</th>
+                            </tr>
+                        </thead>
+                        <tbody id="globalLeaderboardBody">
+                            <tr><td colspan="5" style="text-align:center; padding:20px;">Loading Global Leaderboard...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3. FREE RAG WEB SEARCH TAB -->
         <div class="tab-content" id="viewRag">
             <div class="crystal-panel rag-card tilt-card" style="width:100%; padding:32px;">
                 <div class="rag-header">
@@ -105,7 +162,7 @@
             </div>
         </div>
 
-        <!-- 3. MEME CREATOR STUDIO TAB -->
+        <!-- 4. MEME CREATOR STUDIO TAB -->
         <div class="tab-content" id="viewStudio">
             <div class="crystal-panel studio-card tilt-card">
                 <div class="studio-header">
@@ -157,7 +214,7 @@
             </div>
         </div>
 
-        <!-- 4. 5-ROUND MATCH ARENA TAB -->
+        <!-- 5. 5-ROUND MATCH ARENA TAB -->
         <div class="tab-content" id="viewArena">
             <div class="crystal-panel match-arena-card tilt-card">
                 <div class="arena-header">
@@ -202,7 +259,7 @@
             </div>
         </div>
 
-        <!-- 5. FRIENDS TAB -->
+        <!-- 6. FRIENDS TAB -->
         <div class="tab-content" id="viewFriends">
             <div class="crystal-panel friends-card tilt-card">
                 <h2 class="crystal-title">👥 Friends & Requests</h2>
@@ -229,7 +286,7 @@
             </div>
         </div>
 
-        <!-- 6. GENIE QUICK CHAT TAB -->
+        <!-- 7. GENIE QUICK CHAT TAB -->
         <div class="tab-content" id="viewChat">
             <div class="crystal-panel chat-container-card tilt-card">
                 <div class="chat-header" style="display:flex; justify-content:space-between; align-items:center;">
@@ -257,7 +314,7 @@
     </main>
 
     <footer class="app-footer">
-        <p>Meme Genie 🧞‍♂️ &bull; <strong style="color:var(--neon-cyan);">MADE BY MEMERS, MADE FOR MEMERS</strong> &bull; 2026</p>
+        <p>Meme Genie 🧞‍♂️ &bull; <strong style="color:var(--neon-cyan);">MADE BY MEMERS, MADE FOR MEMERS</strong> &bull; v4.0.0-Beta</p>
     </footer>
 
     <!-- User Profile Modal -->
