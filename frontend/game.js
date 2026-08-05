@@ -1,8 +1,8 @@
 /**
- * Meme Genie 🧞‍♂️ - ASCII Magic & MemeX Engine (v4.1.0-Beta)
+ * Meme Genie 🧞‍♂️ - Human-Crafted Engine (v4.1.0-Beta)
  * "MADE BY MEMERS, MADE FOR MEMERS"
- * Features Frame-by-Frame Animated ASCII Genie, MemeX Virtual Stock Market,
- * Longevity Analytics Hall of Fame, Web Audio Soundboard & RAG Search.
+ * Clean, uncluttered UI engine supporting Mind Reader, MemeX Stock Market,
+ * Hall of Fame, RAG Web Search, WebSockets Arena, and Sound FX.
  */
 
 const API_BASE = "http://127.0.0.1:8000/api";
@@ -31,84 +31,6 @@ let matchWebSocket = null;
 let chatPollInterval = null;
 let matchPollInterval = null;
 
-// Multi-Frame Animated ASCII Genie Rising from Magic Pot
-const ASCII_GENIE_FRAMES = [
-`
-             ☁️
-            ☁️ ☁️
-           (     )
-          (  ✨   )
-           (     )
-            \   /
-             '-'
-         .---.
-        /  🏺 \   [ FRAME 1: The Magic Pot slumbers... ]
-       |_______|
-`,
-`
-            .---.
-           /     \    ☁️
-          |  o.o  |  ✨
-           \  ^  /
-            '| |'
-             | |      ☁️ ~* Magic Smoke Rising! *~
-            /   \
-        .---'   '---.
-       /     🏺     \ [ FRAME 2: The Genie emerges! ]
-      |_______________|
-`,
-`
-            .---.
-           /     \   ✨
-          |  () () |   "YOUR MEME IS MY COMMAND!"
-           \  ===  /
-            '|||'
-             |||
-        .---'   '---.
-       /   .-----.   \   ✨
-      /   /  MEME \   \
-     |   |   GENIE |   |
-      \   \       /   /  [ FRAME 3: Full Power Unlocked! ]
-       '---'--🏺--'---'
-`,
-`
-            ✨ 🧞‍♂️ ✨
-             .---.
-            /     \   💥 "I HAVE READ YOUR MEME MIND!" 💥
-           |  ⚡ ⚡ |
-            \  ===  /
-             '|||'
-              |||
-         .---'   '---.
-        /  .-------.  \
-       /  /  MEME   \  \
-      |   |  GENIE  |   |
-       \  \  🏺🏺  /  /   [ FRAME 4: SUPREME MEME OVERLORD ]
-        '---'-----'---'
-`
-];
-
-let currentAsciiFrame = 0;
-let asciiAnimInterval = null;
-
-function startAsciiAnimationLoop() {
-    if (asciiAnimInterval) clearInterval(asciiAnimInterval);
-    const box = document.getElementById("asciiGenieBox");
-    if (!box) return;
-
-    asciiAnimInterval = setInterval(() => {
-        currentAsciiFrame = (currentAsciiFrame + 1) % ASCII_GENIE_FRAMES.length;
-        box.innerText = ASCII_GENIE_FRAMES[currentAsciiFrame];
-    }, 700);
-}
-
-function triggerAsciiSummon() {
-    playMemeFx('vineboom');
-    currentAsciiFrame = 3;
-    const box = document.getElementById("asciiGenieBox");
-    if (box) box.innerText = ASCII_GENIE_FRAMES[3];
-}
-
 // Template Preset Images for Meme Studio
 const MEME_TEMPLATES = {
     "gigachad": "https://i.kym-cdn.com/entries/icons/original/000/026/152/gigachad.jpg",
@@ -119,11 +41,10 @@ const MEME_TEMPLATES = {
     "rickroll": "https://media.giphy.com/media/Vuw9m5wXviFIQ/giphy.gif"
 };
 
-// HTML5 Canvas Crystal Particle Engine
+// Background Particle Canvas
 let canvas, ctx;
 let particles = [];
-const particleCount = 45;
-let mousePos = { x: -100, y: -100 };
+const particleCount = 30;
 
 function initCrystalParticles() {
     canvas = document.getElementById("crystalCanvas");
@@ -131,21 +52,17 @@ function initCrystalParticles() {
     ctx = canvas.getContext("2d");
     resizeCanvas();
     window.addEventListener("resize", resizeCanvas);
-    window.addEventListener("mousemove", (e) => {
-        mousePos.x = e.clientX;
-        mousePos.y = e.clientY;
-    });
 
     particles = [];
     for (let i = 0; i < particleCount; i++) {
         particles.push({
             x: Math.random() * canvas.width,
             y: Math.random() * canvas.height,
-            size: Math.random() * 3 + 1,
-            speedX: (Math.random() - 0.5) * 0.8,
-            speedY: (Math.random() - 0.5) * 0.8,
-            color: ['#00f2fe', '#38bdf8', '#c084fc', '#f472b6', '#fbbf24'][Math.floor(Math.random() * 5)],
-            alpha: Math.random() * 0.7 + 0.3
+            size: Math.random() * 2 + 1,
+            speedX: (Math.random() - 0.5) * 0.4,
+            speedY: (Math.random() - 0.5) * 0.4,
+            color: '#38bdf8',
+            alpha: Math.random() * 0.4 + 0.1
         });
     }
     animateParticles();
@@ -167,19 +84,9 @@ function animateParticles() {
         if (p.y < 0) p.y = canvas.height;
         if (p.y > canvas.height) p.y = 0;
 
-        const dx = mousePos.x - p.x;
-        const dy = mousePos.y - p.y;
-        const dist = Math.sqrt(dx * dx + dy * dy);
-        if (dist < 130) {
-            p.x -= (dx / dist) * 1.6;
-            p.y -= (dy / dist) * 1.6;
-        }
-
         ctx.save();
         ctx.globalAlpha = p.alpha;
         ctx.fillStyle = p.color;
-        ctx.shadowBlur = 10;
-        ctx.shadowColor = p.color;
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
         ctx.fill();
@@ -188,27 +95,7 @@ function animateParticles() {
     requestAnimationFrame(animateParticles);
 }
 
-// 3D Card Perspective Mouse Tilt Engine
-function init3DCrystalTilt() {
-    document.querySelectorAll(".tilt-card").forEach(card => {
-        card.addEventListener("mousemove", (e) => {
-            const rect = card.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
-            const centerX = rect.width / 2;
-            const centerY = rect.height / 2;
-            const rotateX = ((y - centerY) / centerY) * -4;
-            const rotateY = ((x - centerX) / centerX) * 4;
-            card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
-        });
-
-        card.addEventListener("mouseleave", () => {
-            card.style.transform = "perspective(1000px) rotateX(0deg) rotateY(0deg)";
-        });
-    });
-}
-
-// Web Audio API Synthesizer & Meme Soundboard Engine
+// Sound Synthesizer
 let audioCtx = null;
 function getAudioContext() {
     if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -227,97 +114,25 @@ function playMagicSound(type) {
 
         if (type === 'click') {
             osc.type = 'sine';
-            osc.frequency.setValueAtTime(600, now);
-            osc.frequency.exponentialRampToValueAtTime(1200, now + 0.08);
-            gain.gain.setValueAtTime(0.18, now);
-            gain.gain.exponentialRampToValueAtTime(0.01, now + 0.08);
+            osc.frequency.setValueAtTime(500, now);
+            osc.frequency.exponentialRampToValueAtTime(800, now + 0.05);
+            gain.gain.setValueAtTime(0.1, now);
+            gain.gain.exponentialRampToValueAtTime(0.01, now + 0.05);
             osc.start(now);
-            osc.stop(now + 0.08);
+            osc.stop(now + 0.05);
         } else if (type === 'victory') {
-            [523.25, 659.25, 783.99, 1046.50].forEach((freq, idx) => {
+            [523.25, 659.25, 783.99].forEach((freq, idx) => {
                 const o = ctx.createOscillator();
                 const g = ctx.createGain();
                 o.connect(g);
                 g.connect(ctx.destination);
                 o.type = 'sine';
-                o.frequency.setValueAtTime(freq, now + (idx * 0.1));
-                g.gain.setValueAtTime(0.22, now + (idx * 0.1));
-                g.gain.exponentialRampToValueAtTime(0.001, now + (idx * 0.1) + 0.3);
-                o.start(now + (idx * 0.1));
-                o.stop(now + (idx * 0.1) + 0.3);
+                o.frequency.setValueAtTime(freq, now + (idx * 0.08));
+                g.gain.setValueAtTime(0.15, now + (idx * 0.08));
+                g.gain.exponentialRampToValueAtTime(0.001, now + (idx * 0.08) + 0.25);
+                o.start(now + (idx * 0.08));
+                o.stop(now + (idx * 0.08) + 0.25);
             });
-        }
-    } catch (e) {}
-}
-
-function playMemeFx(fxName) {
-    if (!soundEnabled) return;
-    try {
-        const ctx = getAudioContext();
-        const now = ctx.currentTime;
-
-        if (fxName === 'vineboom') {
-            const osc = ctx.createOscillator();
-            const gain = ctx.createGain();
-            osc.connect(gain);
-            gain.connect(ctx.destination);
-            osc.type = 'sawtooth';
-            osc.frequency.setValueAtTime(130, now);
-            osc.frequency.exponentialRampToValueAtTime(30, now + 0.6);
-            gain.gain.setValueAtTime(0.6, now);
-            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.6);
-            osc.start(now);
-            osc.stop(now + 0.6);
-        } else if (fxName === 'bruh') {
-            const osc = ctx.createOscillator();
-            const gain = ctx.createGain();
-            osc.connect(gain);
-            gain.connect(ctx.destination);
-            osc.type = 'triangle';
-            osc.frequency.setValueAtTime(220, now);
-            osc.frequency.linearRampToValueAtTime(110, now + 0.4);
-            gain.gain.setValueAtTime(0.4, now);
-            gain.gain.exponentialRampToValueAtTime(0.01, now + 0.4);
-            osc.start(now);
-            osc.stop(now + 0.4);
-        } else if (fxName === 'airhorn') {
-            [466.16, 466.16, 466.16, 622.25].forEach((freq, idx) => {
-                const o = ctx.createOscillator();
-                const g = ctx.createGain();
-                o.connect(g);
-                g.connect(ctx.destination);
-                o.type = 'square';
-                const startTime = now + (idx * 0.08);
-                o.frequency.setValueAtTime(freq, startTime);
-                g.gain.setValueAtTime(0.2, startTime);
-                g.gain.exponentialRampToValueAtTime(0.01, startTime + 0.07);
-                o.start(startTime);
-                o.stop(startTime + 0.07);
-            });
-        } else if (fxName === 'sadviolin') {
-            const osc = ctx.createOscillator();
-            const gain = ctx.createGain();
-            osc.connect(gain);
-            gain.connect(ctx.destination);
-            osc.type = 'sine';
-            osc.frequency.setValueAtTime(440, now);
-            osc.frequency.linearRampToValueAtTime(415, now + 0.8);
-            gain.gain.setValueAtTime(0.25, now);
-            gain.gain.exponentialRampToValueAtTime(0.01, now + 0.8);
-            osc.start(now);
-            osc.stop(now + 0.8);
-        } else if (fxName === 'braww') {
-            const osc = ctx.createOscillator();
-            const gain = ctx.createGain();
-            osc.connect(gain);
-            gain.connect(ctx.destination);
-            osc.type = 'sawtooth';
-            osc.frequency.setValueAtTime(300, now);
-            osc.frequency.exponentialRampToValueAtTime(80, now + 0.3);
-            gain.gain.setValueAtTime(0.35, now);
-            gain.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
-            osc.start(now);
-            osc.stop(now + 0.3);
         }
     } catch (e) {}
 }
@@ -342,10 +157,10 @@ function switchTab(tabName) {
     if (tabName === 'genie') {
         document.getElementById("tabGenie").classList.add("active");
         document.getElementById("viewGenie").classList.add("active");
-    } else if (tabName === 'ascii') {
-        document.getElementById("tabAscii").classList.add("active");
-        document.getElementById("viewAscii").classList.add("active");
-        startAsciiAnimationLoop();
+    } else if (tabName === 'studio') {
+        document.getElementById("tabStudio").classList.add("active");
+        document.getElementById("viewStudio").classList.add("active");
+        updateStudioMemeCanvas();
     } else if (tabName === 'economy') {
         document.getElementById("tabEconomy").classList.add("active");
         document.getElementById("viewEconomy").classList.add("active");
@@ -361,10 +176,6 @@ function switchTab(tabName) {
     } else if (tabName === 'rag') {
         document.getElementById("tabRag").classList.add("active");
         document.getElementById("viewRag").classList.add("active");
-    } else if (tabName === 'studio') {
-        document.getElementById("tabStudio").classList.add("active");
-        document.getElementById("viewStudio").classList.add("active");
-        updateStudioMemeCanvas();
     } else if (tabName === 'arena') {
         document.getElementById("tabArena").classList.add("active");
         document.getElementById("viewArena").classList.add("active");
@@ -396,38 +207,9 @@ function renderUserStatsUI() {
     document.getElementById("userAvatar").innerText = currentUser.avatar_emoji;
     document.getElementById("userNameLabel").innerText = currentUser.username;
     document.getElementById("hdrLevel").innerText = currentUser.level || 1;
-    document.getElementById("modalLevel").innerText = currentUser.level || 1;
-    document.getElementById("userXp").innerText = currentUser.xp || 100;
     document.getElementById("hdrCoins").innerText = currentUser.coins || 1000;
     const mCoins = document.getElementById("marketCoinBalance");
     if (mCoins) mCoins.innerText = currentUser.coins || 1000;
-
-    const xpPercent = Math.min(100, ((currentUser.xp % 250) / 250) * 100);
-    document.getElementById("xpBarFill").style.width = `${xpPercent}%`;
-
-    const bRow = document.getElementById("userBadgesRow");
-    if (bRow) {
-        bRow.innerHTML = (currentUser.badges || ["Meme Novice"]).map(b => `<span class="badge-pill">🏅 ${b}</span>`).join(" ");
-    }
-
-    if (currentUser.active_skin) {
-        changeCrystalOrbSkin(currentUser.active_skin);
-    }
-}
-
-async function changeCrystalOrbSkin(skinName) {
-    currentUser.active_skin = skinName;
-    const orb = document.getElementById("mainCrystalOrb");
-    if (orb) {
-        orb.className = `crystal-orb skin-${skinName}`;
-    }
-    try {
-        await fetch(`${API_BASE}/user/equip-skin`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ user_id: currentUser.user_id, skin_name: skinName })
-        });
-    } catch (e) {}
 }
 
 function openProfileModal() { document.getElementById("profileModal").classList.add("active"); }
@@ -442,7 +224,6 @@ async function saveUserProfile(e) {
         currentUser.avatar_emoji = newAvatar;
         await syncUserProfile();
         closeProfileModal();
-        alert("✅ Profile & Skin updated! Welcome " + currentUser.username);
     }
 }
 
@@ -451,9 +232,6 @@ async function fetchMarketData() {
     try {
         const res = await fetch(`${API_BASE}/economy/market`);
         const data = await res.json();
-        
-        const tape = document.getElementById("tickerTapeText");
-        if (tape && data.ticker_tape) tape.innerText = "📈 MEMEX MARKET: " + data.ticker_tape;
 
         const grid = document.getElementById("stocksGrid");
         if (grid && data.stocks) {
@@ -463,15 +241,15 @@ async function fetchMarketData() {
                 return `
                     <div class="stock-card">
                         <div style="display:flex; justify-content:space-between; align-items:center;">
-                            <strong style="font-size:18px; color:var(--neon-cyan);">$${s.ticker}</strong>
+                            <strong style="font-size:16px; color:var(--accent-cyan);">$${s.ticker}</strong>
                             <span class="${isUp ? 'price-up' : 'price-down'}">${isUp ? '▲' : '▼'} ${s.change_pct}%</span>
                         </div>
-                        <div style="font-size:14px; font-weight:700;">${s.name}</div>
-                        <div style="font-size:22px; font-weight:900; color:white;">🪙 ${s.price}</div>
-                        <div style="font-size:12px; color:var(--text-secondary);">Owned: ${owned} shares</div>
-                        <div style="display:flex; gap:8px; margin-top:8px;">
-                            <button class="crystal-btn" style="flex:1; padding:6px; font-size:12px; background:var(--neon-green); color:black;" onclick="executeMemeTrade('${s.ticker}', 'buy')">Buy 1 Share</button>
-                            <button class="crystal-btn" style="flex:1; padding:6px; font-size:12px; background:var(--neon-red); color:white;" onclick="executeMemeTrade('${s.ticker}', 'sell')">Sell 1 Share</button>
+                        <div style="font-size:13px; color:var(--text-muted);">${s.name}</div>
+                        <div style="font-size:20px; font-weight:700; color:white; margin:4px 0;">🪙 ${s.price}</div>
+                        <div style="font-size:12px; color:var(--text-dim);">Owned: ${owned} shares</div>
+                        <div style="display:flex; gap:6px; margin-top:8px;">
+                            <button class="crystal-btn" style="flex:1; padding:6px; font-size:12px; background:rgba(16,185,129,0.2); color:var(--accent-green);" onclick="executeMemeTrade('${s.ticker}', 'buy')">Buy</button>
+                            <button class="crystal-btn" style="flex:1; padding:6px; font-size:12px; background:rgba(244,63,94,0.2); color:var(--accent-red);" onclick="executeMemeTrade('${s.ticker}', 'sell')">Sell</button>
                         </div>
                     </div>
                 `;
@@ -509,20 +287,20 @@ async function fetchHallOfFame() {
         if (grid && data.rankings) {
             grid.innerHTML = data.rankings.map((m, idx) => `
                 <div class="hof-card-item">
-                    <div style="font-size:28px; font-weight:900; color:var(--neon-gold);">#${idx + 1}</div>
-                    <div class="media-frame" style="max-width:160px; max-height:110px;">
+                    <div style="font-size:22px; font-weight:800; color:var(--accent-gold);">#${idx + 1}</div>
+                    <div class="media-frame" style="max-width:140px; max-height:90px;">
                         <img src="${m.media_url}" alt="${m.name}">
                     </div>
                     <div style="flex:1;">
-                        <h3 class="crystal-title" style="font-size:20px;">${m.name}</h3>
+                        <h3 style="font-size:18px; font-weight:600;">${m.name}</h3>
                         <div style="margin-top:4px;">
-                            <span class="longevity-badge">⏳ Longevity: ${m.longevity}</span>
-                            <span class="badge-pill" style="margin-left:6px; background:rgba(0,242,254,0.15); color:var(--neon-cyan);">⚡ Virality: ${m.peak_virality}%</span>
+                            <span class="longevity-badge">⏳ ${m.longevity}</span>
+                            <span class="badge-pill" style="margin-left:6px;">⚡ Virality: ${m.peak_virality}%</span>
                         </div>
-                        <p style="color:var(--text-secondary); font-size:13px; margin-top:6px;">${m.description || ''}</p>
+                        <p style="color:var(--text-muted); font-size:13px; margin-top:4px;">${m.description || ''}</p>
                     </div>
-                    <div style="display:flex; flex-direction:column; align-items:center; gap:6px;">
-                        <button class="crystal-btn" style="padding:8px 16px; font-size:13px; background:var(--ios-gold-gradient); color:#030308;" onclick="upvoteMeme('${m.id}')">🏆 Upvote (${m.upvotes})</button>
+                    <div>
+                        <button class="crystal-btn" style="padding:6px 14px; font-size:13px; background:rgba(251,191,36,0.15); color:var(--accent-gold);" onclick="upvoteMeme('${m.id}')">🏆 Upvote (${m.upvotes})</button>
                     </div>
                 </div>
             `).join("");
@@ -548,12 +326,12 @@ async function fetchGlobalLeaderboard() {
         const tbody = document.getElementById("globalLeaderboardBody");
         if (data.leaderboard && data.leaderboard.length > 0) {
             tbody.innerHTML = data.leaderboard.map(u => `
-                <tr style="border-bottom:1px solid rgba(255,255,255,0.06);">
-                    <td style="padding:12px; font-weight:800; color:var(--neon-gold);">#${u.rank}</td>
-                    <td style="padding:12px;">${u.avatar_emoji} <strong>${u.username}</strong></td>
-                    <td style="padding:12px; text-align:center; font-weight:700;">Lvl ${u.level}</td>
-                    <td style="padding:12px; text-align:center; color:var(--neon-cyan); font-weight:800;">${u.xp} XP</td>
-                    <td style="padding:12px; text-align:right;">${(u.badges || []).map(b => `<span class="badge-pill" style="font-size:10px;">${b}</span>`).join(" ")}</td>
+                <tr style="border-bottom:1px solid var(--panel-border);">
+                    <td style="padding:10px; font-weight:700; color:var(--accent-gold);">#${u.rank}</td>
+                    <td style="padding:10px;">${u.avatar_emoji} <strong>${u.username}</strong></td>
+                    <td style="padding:10px; text-align:center;">Lvl ${u.level}</td>
+                    <td style="padding:10px; text-align:center; color:var(--accent-cyan); font-weight:600;">${u.xp} XP</td>
+                    <td style="padding:10px; text-align:right;">${(u.badges || []).map(b => `<span class="badge-pill">${b}</span>`).join(" ")}</td>
                 </tr>
             `).join("");
         }
@@ -577,14 +355,14 @@ async function searchWebMemes() {
 
     playMagicSound('click');
     const container = document.getElementById("ragResultsArea");
-    container.innerHTML = `<div class="crystal-subpanel" style="text-align:center; padding:25px;"><p>🌐 Searching live web for meme '${query}' via RAG Engine...</p></div>`;
+    container.innerHTML = `<div class="crystal-subpanel" style="text-align:center; padding:20px; color:var(--text-muted);"><p>🌐 Searching live web for meme '${query}' via RAG Engine...</p></div>`;
 
     try {
         const res = await fetch(`${API_BASE}/rag/search?query=${encodeURIComponent(query)}`);
         const data = await res.json();
         renderRagResults(data);
     } catch (e) {
-        container.innerHTML = `<div class="crystal-subpanel" style="text-align:center; padding:25px; color:#ef4444;"><p>Error connecting to RAG web engine.</p></div>`;
+        container.innerHTML = `<div class="crystal-subpanel" style="text-align:center; padding:20px; color:var(--accent-red);"><p>Error connecting to RAG web engine.</p></div>`;
     }
 }
 
@@ -594,35 +372,32 @@ function renderRagResults(data) {
     const sources = data.sources || [];
 
     const sourcesHTML = sources.map(s => `
-        <div style="background:rgba(255,255,255,0.05); padding:8px 12px; border-radius:10px; margin-top:6px; font-size:12px;">
-            <a href="${s.link}" target="_blank" style="color:var(--neon-cyan); font-weight:700; text-decoration:none;">🔗 ${s.title}</a>
-            <p style="color:var(--text-secondary); margin-top:2px;">${s.snippet}</p>
+        <div style="background:rgba(255,255,255,0.02); padding:8px 12px; border-radius:10px; margin-top:6px; font-size:12px;">
+            <a href="${s.link}" target="_blank" style="color:var(--accent-cyan); font-weight:600; text-decoration:none;">🔗 ${s.title}</a>
+            <p style="color:var(--text-muted); margin-top:2px;">${s.snippet}</p>
         </div>
     `).join("");
 
     container.innerHTML = `
-        <div class="crystal-subpanel" style="display:flex; flex-direction:column; gap:15px;">
+        <div class="crystal-subpanel" style="display:flex; flex-direction:column; gap:12px;">
             <div style="display:flex; justify-content:space-between; align-items:center;">
-                <span class="censor-badge" style="background:rgba(0,242,254,0.15); color:var(--neon-cyan);">🤖 Source: ${data.rag_source}</span>
-                <button class="primary-btn crystal-btn" style="padding:6px 16px; font-size:13px;" onclick='importRagMeme(${JSON.stringify(meme)})'>📥 Import to Genie Memory</button>
+                <span class="censor-badge">🤖 Source: ${data.rag_source}</span>
+                <button class="primary-btn crystal-btn" style="padding:6px 14px; font-size:12px;" onclick='importRagMeme(${JSON.stringify(meme)})'>📥 Import to Memory</button>
             </div>
 
-            <div style="display:flex; gap:20px; flex-wrap:wrap; align-items:center;">
-                <div class="media-frame" style="max-width:260px; max-height:180px;">
+            <div style="display:flex; gap:16px; flex-wrap:wrap; align-items:center;">
+                <div class="media-frame" style="max-width:220px; max-height:150px;">
                     <img src="${meme.media_url}" alt="${meme.name}">
                 </div>
                 <div style="flex:1;">
-                    <h2 class="crystal-title" style="font-size:24px;">${meme.name}</h2>
-                    <p style="color:#cbd5e1; font-size:14px; margin-top:6px;">${meme.description}</p>
-                    <div style="margin-top:10px; display:flex; gap:6px; flex-wrap:wrap;">
-                        ${(meme.tags || []).map(t => `<span class="quote-tag" style="background:rgba(192,132,252,0.2); color:var(--neon-purple); font-size:11px;">#${t}</span>`).join(" ")}
-                    </div>
+                    <h2 style="font-size:20px; font-weight:600;">${meme.name}</h2>
+                    <p style="color:var(--text-muted); font-size:13.5px; margin-top:4px;">${meme.description}</p>
                 </div>
             </div>
 
-            <div style="margin-top:10px;">
-                <h4 style="font-size:14px; color:var(--text-secondary);">🌐 Retrieved Web Sources:</h4>
-                ${sourcesHTML || '<p style="font-size:12px; color:var(--text-secondary);">Web sources indexed.</p>'}
+            <div style="margin-top:8px;">
+                <h4 style="font-size:13px; color:var(--text-muted);">🌐 Web Sources:</h4>
+                ${sourcesHTML || '<p style="font-size:12px; color:var(--text-dim);">Indexed.</p>'}
             </div>
         </div>
     `;
@@ -642,7 +417,7 @@ async function importRagMeme(memeObj) {
     } catch (e) { alert("Failed to import meme."); }
 }
 
-// --- 🎨 IN-APP MEME CREATOR STUDIO ---
+// --- 🎨 MEME CREATOR STUDIO ---
 function updateStudioMemeCanvas() {
     const canvas = document.getElementById("memeStudioCanvas");
     if (!canvas) return;
@@ -661,7 +436,7 @@ function updateStudioMemeCanvas() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
 
-        ctx.font = `900 ${fontSize}px ${currentUser.font_ios || 'Outfit'}, Impact, sans-serif`;
+        ctx.font = `900 ${fontSize}px Impact, sans-serif`;
         ctx.textAlign = "center";
         ctx.fillStyle = textColor;
         ctx.strokeStyle = "#000000";
@@ -697,12 +472,10 @@ async function publishStudioMeme() {
             })
         });
         if (res.ok) {
-            alert("🚀 1-Click Published! Your meme is now inside Genie's Memory!");
+            alert("🚀 Published! Your meme is now inside Genie Memory.");
             playMagicSound('victory');
-            await fetch(`${API_BASE}/user/award-xp?user_id=${currentUser.user_id}&xp_amount=50&badge=Meme%20Picasso`, { method: "POST" });
-            syncUserProfile();
         }
-    } catch (e) { alert("Failed to publish meme."); }
+    } catch (e) {}
 }
 
 function downloadStudioMeme() {
@@ -715,23 +488,19 @@ function downloadStudioMeme() {
     playMagicSound('click');
 }
 
-// --- ⚡ WEBSOCKETS REAL-TIME MATCH ARENA ---
+// --- ⚡ WEBSOCKETS MATCH ARENA ---
 function initMatchWebSocket(roomCode) {
     if (matchWebSocket) matchWebSocket.close();
     const wsUrl = `ws://127.0.0.1:8000/api/ws/match/${roomCode}/${currentUser.user_id}`;
     
     try {
         matchWebSocket = new WebSocket(wsUrl);
-        matchWebSocket.onopen = () => console.log("⚡ WebSockets Connected to Room:", roomCode);
-        matchWebSocket.onmessage = (event) => {
-            const data = JSON.parse(event.data);
-            pollMatchState();
-        };
-        matchWebSocket.onerror = (err) => console.warn("WebSocket Error:", err);
+        matchWebSocket.onopen = () => console.log("⚡ WebSockets Connected:", roomCode);
+        matchWebSocket.onmessage = () => pollMatchState();
     } catch (e) {}
 }
 
-// --- GENIE QUICK CHAT & PROFANITY FILTER ---
+// --- QUICK CHAT ---
 async function fetchQuickChatPresets() {
     try {
         const res = await fetch(`${API_BASE}/chat/quick-presets`);
@@ -779,8 +548,8 @@ async function fetchChatMessages() {
         const feed = document.getElementById("chatFeed");
         
         feed.innerHTML = (data.messages || []).map(msg => `
-            <div class="chat-msg ${msg.is_quick_chat ? 'quick' : ''}">
-                <span class="sender" style="color:var(--neon-cyan); font-weight:800;">${msg.username}:</span> ${msg.sanitized_content}
+            <div class="chat-msg">
+                <span style="color:var(--accent-cyan); font-weight:600;">${msg.username}:</span> ${msg.sanitized_content}
             </div>
         `).join("");
         feed.scrollTop = feed.scrollHeight;
@@ -793,7 +562,7 @@ function startChatPolling() {
     chatPollInterval = setInterval(fetchChatMessages, 2500);
 }
 
-// --- FRIEND REQUEST SYSTEM ---
+// --- FRIEND REQUESTS ---
 async function sendFriendRequest() {
     const targetName = document.getElementById("friendUsernameInput").value.trim();
     if (!targetName) return;
@@ -805,7 +574,7 @@ async function sendFriendRequest() {
         });
         const data = await res.json();
         if (res.ok) {
-            alert(`✅ Friend Request sent to ${targetName}!`);
+            alert(`✅ Request sent to ${targetName}!`);
             document.getElementById("friendUsernameInput").value = "";
             fetchFriendsList();
         } else {
@@ -821,28 +590,27 @@ async function fetchFriendsList() {
         const pList = document.getElementById("pendingRequestsList");
         if (data.pending_requests && data.pending_requests.length > 0) {
             pList.innerHTML = data.pending_requests.map(req => `
-                <div class="friend-item" style="display:flex; justify-content:space-between; align-items:center; background:rgba(255,255,255,0.06); padding:10px 14px; border-radius:14px; margin-top:8px;">
-                    <span>📩 Request from <strong>${req.from_username}</strong></span>
+                <div style="display:flex; justify-content:space-between; align-items:center; background:rgba(255,255,255,0.03); padding:8px 12px; border-radius:10px; margin-top:6px; font-size:13px;">
+                    <span>Request from <strong>${req.from_username}</strong></span>
                     <div>
-                        <button class="crystal-btn" style="padding: 4px 10px; font-size: 12px;" onclick="respondFriendReq('${req.request_id}', 'accept')">Accept</button>
-                        <button class="crystal-btn" style="padding: 4px 10px; font-size: 12px; background: rgba(239,68,68,0.2);" onclick="respondFriendReq('${req.request_id}', 'reject')">Decline</button>
+                        <button class="crystal-btn" style="padding:4px 10px; font-size:12px;" onclick="respondFriendReq('${req.request_id}', 'accept')">Accept</button>
                     </div>
                 </div>
             `).join("");
         } else {
-            pList.innerHTML = `<p class="empty-text">No pending requests</p>`;
+            pList.innerHTML = `<p style="font-size:13px; color:var(--text-dim);">No pending requests</p>`;
         }
 
         const fList = document.getElementById("myFriendsList");
         if (data.friends && data.friends.length > 0) {
             fList.innerHTML = data.friends.map(f => `
-                <div class="friend-item" style="display:flex; justify-content:space-between; align-items:center; background:rgba(255,255,255,0.06); padding:10px 14px; border-radius:14px; margin-top:8px;">
+                <div style="display:flex; justify-content:space-between; align-items:center; background:rgba(255,255,255,0.03); padding:8px 12px; border-radius:10px; margin-top:6px; font-size:13px;">
                     <span>${f.avatar_emoji} <strong>${f.username}</strong></span>
-                    <span style="color:var(--neon-cyan); font-size: 12px; font-weight:700;">${f.status}</span>
+                    <span style="color:var(--accent-cyan);">${f.status}</span>
                 </div>
             `).join("");
         } else {
-            fList.innerHTML = `<p class="empty-text">No friends added yet. Send a request above!</p>`;
+            fList.innerHTML = `<p style="font-size:13px; color:var(--text-dim);">No friends added yet.</p>`;
         }
     } catch (e) {}
 }
@@ -858,7 +626,7 @@ async function respondFriendReq(reqId, action) {
     } catch (e) {}
 }
 
-// --- 5-ROUND SPEED MATCH ARENA ---
+// --- MATCH ARENA ---
 async function createNewMatch() {
     try {
         const res = await fetch(`${API_BASE}/match/create`, {
@@ -914,13 +682,8 @@ async function pollMatchState() {
             mediaFrame.innerHTML = `<img src="${state.hint.media_url}" alt="Meme Hint">`;
         }
 
-        const tagsBox = document.getElementById("matchHintTags");
-        if (state.hint && state.hint.tags) {
-            tagsBox.innerHTML = state.hint.tags.map(t => `<span class="quote-tag" style="background:rgba(0,242,254,0.15); color:var(--neon-cyan); padding:4px 10px; border-radius:10px; margin-right:5px;">#${t}</span>`).join(" ");
-        }
-
         if (state.is_finished && state.winner) {
-            document.getElementById("guessFeedback").innerText = `👑 GAME OVER! Ultimate Champion: ${state.winner.username} with ${state.winner.score} pts!`;
+            document.getElementById("guessFeedback").innerText = `👑 Winner: ${state.winner.username} (${state.winner.score} pts)`;
             playMagicSound('victory');
         }
     } catch (e) {}
@@ -955,16 +718,15 @@ async function submitMatchSpeedGuess() {
         const fb = document.getElementById("guessFeedback");
 
         if (data.correct) {
-            fb.innerHTML = `🎯 <span style="color:var(--neon-cyan);">CORRECT! +${data.points_earned} Points! (${data.target_name})</span>`;
+            fb.innerHTML = `🎯 <span style="color:var(--accent-cyan);">CORRECT! +${data.points_earned} Pts</span>`;
             playMagicSound('victory');
-            syncUserProfile();
         } else {
-            fb.innerHTML = `❌ <span style="color:#ef4444;">${data.message || 'Incorrect guess'}</span>`;
+            fb.innerHTML = `❌ <span style="color:var(--accent-red);">${data.message || 'Incorrect'}</span>`;
         }
     } catch (e) {}
 }
 
-// --- SINGLE PLAYER GENIE GAME LIFECYCLE ---
+// --- MIND READER GAME LIFECYCLE ---
 async function startGame() {
     playMagicSound('click');
     setGenieMood("thinking", "Gazing into the Liquid Mind Crystal...", "🔮");
@@ -1002,7 +764,7 @@ function renderQuestion(data) {
         moodText = "YO! Let me cook real quick!!";
         emoji = "🧢";
     } else if (currentGeniePersonality === 'boomer') {
-        moodText = "Back in my day memes were simple images...";
+        moodText = "Back in my day memes were simple...";
         emoji = "👓";
     }
 
@@ -1053,23 +815,20 @@ function renderGuessReveal(meme, confidence) {
     playMagicSound('victory');
     setGenieMood("victory", "The Liquid Crystal Orb has spoken!", "✨");
     const area = document.getElementById("gameArea");
-    const quotesTags = (meme.quotes || []).map(q => `<span class="quote-tag" style="background:rgba(244,114,182,0.15); color:var(--neon-pink); padding:4px 12px; border-radius:12px; font-style:italic;">"${q}"</span>`).join(" ");
 
     area.innerHTML = `
         <div class="guess-card-container">
-            <div class="guess-badge crystal-badge">🎯 Genie's Guess (${confidence || 95}% Confidence)</div>
-            <h1 class="meme-title crystal-title">${meme.name}</h1>
+            <div class="score-badge">🎯 Genie's Guess (${confidence || 95}% Confidence)</div>
+            <h1 class="glow-title crystal-title">${meme.name}</h1>
 
             <div class="media-frame">
-                <img src="${meme.media_url}" alt="${meme.name}" onerror="this.src='https://images.unsplash.com/photo-1579546929518-9e396f3cc809?w=600'">
+                <img src="${meme.media_url}" alt="${meme.name}">
             </div>
 
-            <p style="color: #cbd5e1; max-width: 500px; font-size: 14px;">${meme.description || ''}</p>
-
-            <div class="quotes-cloud" style="display:flex; gap:8px; flex-wrap:wrap; justify-content:center;">${quotesTags}</div>
+            <p style="color:var(--text-muted); max-width: 480px; font-size: 14px;">${meme.description || ''}</p>
 
             <div class="action-buttons">
-                <button class="primary-btn crystal-btn-large pulse-glow" onclick="startGame()">🎉 Read Another Mind</button>
+                <button class="primary-btn crystal-btn-large" onclick="startGame()">🔮 Read Another Mind</button>
             </div>
         </div>
     `;
@@ -1100,20 +859,15 @@ async function submitNewMeme(e) {
     e.preventDefault();
     const name = document.getElementById("memeName").value;
     const media_url = document.getElementById("memeMediaUrl").value;
-    const format = document.getElementById("memeFormat").value;
-    const era = document.getElementById("memeEra").value;
-    const tags = document.getElementById("memeTags").value.split(",").map(t => t.trim().toLowerCase()).filter(Boolean);
-    const quotes = document.getElementById("memeQuotes").value.split(",").map(q => q.trim()).filter(Boolean);
-    const description = document.getElementById("memeDesc").value;
 
     try {
         const res = await fetch(`${API_BASE}/memes`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ name, media_url, format, era, tags, quotes, description })
+            body: JSON.stringify({ name, media_url, format: "image", era: "2020s", tags: ["custom"], quotes: [], description: "User added" })
         });
         if (res.ok) {
-            alert("✅ New Meme successfully added to Genie Memory!");
+            alert("✅ Meme added to Genie Memory!");
             closeAddMemeModal();
         }
     } catch (err) {}
@@ -1123,6 +877,4 @@ window.addEventListener("DOMContentLoaded", () => {
     initCrystalParticles();
     init3DCrystalTilt();
     syncUserProfile();
-    fetchMarketData();
-    setInterval(fetchMarketData, 8000);
 });

@@ -1,35 +1,37 @@
 /* ==========================================================================
-   iPhone / iOS-Grade Liquid Crystal UI Engine
-   Meme Genie 🧞‍♂️ - "MADE BY MEMERS, MADE FOR MEMERS" (v4.1.0-Beta)
+   Meme Genie 🧞‍♂️ - Human-Crafted Minimalist UI Engine
+   Design System: Clean, Quiet Glassmorphism (Linear / Vercel / Apple Dark Mode)
+   "MADE BY MEMERS, MADE FOR MEMERS"
    ========================================================================== */
 
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
 :root {
-    /* iOS Liquid Color Palette */
-    --ios-bg: #030308;
-    --ios-glass-bg: rgba(255, 255, 255, 0.08);
-    --ios-glass-subpanel: rgba(255, 255, 255, 0.05);
-    --ios-glass-header: rgba(18, 15, 38, 0.75);
+    /* Color Palette */
+    --bg-dark: #090a0f;
+    --panel-bg: rgba(255, 255, 255, 0.03);
+    --panel-subbg: rgba(255, 255, 255, 0.02);
+    --panel-border: rgba(255, 255, 255, 0.08);
+    --panel-border-hover: rgba(255, 255, 255, 0.18);
     
-    --specular-light: rgba(255, 255, 255, 0.45);
-    --specular-border: rgba(255, 255, 255, 0.22);
+    --accent-cyan: #38bdf8;
+    --accent-purple: #a855f7;
+    --accent-pink: #f472b6;
+    --accent-gold: #fbbf24;
+    --accent-green: #10b981;
+    --accent-red: #f43f5e;
     
-    --neon-cyan: #00f2fe;
-    --neon-blue: #38bdf8;
-    --neon-purple: #c084fc;
-    --neon-pink: #f472b6;
-    --neon-gold: #fbbf24;
-    --neon-green: #10b981;
-    --neon-red: #ef4444;
+    --primary-gradient: linear-gradient(135deg, #38bdf8 0%, #a855f7 100%);
+    --gold-gradient: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
     
-    --ios-primary-gradient: linear-gradient(135deg, #00f2fe 0%, #38bdf8 40%, #c084fc 100%);
-    --ios-pink-gradient: linear-gradient(135deg, #f472b6 0%, #c084fc 100%);
-    --ios-gold-gradient: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+    --text-main: #f8fafc;
+    --text-muted: #94a3b8;
+    --text-dim: #64748b;
     
-    --text-primary: #ffffff;
-    --text-secondary: #94a3b8;
-    
-    --font-ios: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Outfit", sans-serif;
-    --squircle-radius: 32px;
+    --font-main: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    --radius-lg: 24px;
+    --radius-md: 16px;
+    --radius-sm: 10px;
 }
 
 * {
@@ -41,211 +43,464 @@
 
 body.crystal-theme {
     min-height: 100vh;
-    background: var(--ios-bg);
+    background-color: var(--bg-dark);
     background-image: 
-        radial-gradient(circle at 10% 10%, rgba(0, 242, 254, 0.2) 0px, transparent 45%),
-        radial-gradient(circle at 90% 90%, rgba(192, 132, 252, 0.22) 0px, transparent 50%),
-        radial-gradient(circle at 50% 50%, rgba(244, 114, 182, 0.12) 0px, transparent 60%);
-    font-family: var(--font-ios);
-    color: var(--text-primary);
+        radial-gradient(circle at 15% 15%, rgba(56, 189, 248, 0.07) 0px, transparent 40%),
+        radial-gradient(circle at 85% 85%, rgba(168, 85, 247, 0.07) 0px, transparent 45%);
+    font-family: var(--font-main);
+    color: var(--text-main);
     display: flex;
     flex-direction: column;
     align-items: center;
     overflow-x: hidden;
     position: relative;
+    -webkit-font-smoothing: antialiased;
 }
 
 /* Background Particle Canvas */
-#crystalCanvas { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 0; }
+#crystalCanvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.5;
+}
 
-/* iOS Dynamic Island Header */
+/* Header */
 .app-header.crystal-header {
-    width: 92%; max-width: 1100px; margin-top: 15px; padding: 12px 24px; background: var(--ios-glass-header);
-    backdrop-filter: blur(40px) saturate(210%); -webkit-backdrop-filter: blur(40px) saturate(210%);
-    border: 1px solid var(--specular-border); border-top: 1px solid var(--specular-light); border-radius: 40px;
-    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), 0 0 30px rgba(0, 242, 254, 0.15); display: flex;
-    justify-content: space-between; align-items: center; z-index: 20;
-}
-
-.logo { display: flex; align-items: center; gap: 12px; }
-.crystal-gem-icon { font-size: 26px; filter: drop-shadow(0 0 10px var(--neon-cyan)); animation: crystalGlow 2.5s ease-in-out infinite; }
-.genie-icon { font-size: 32px; filter: drop-shadow(0 0 12px var(--neon-purple)); animation: floatGenie 4s ease-in-out infinite; }
-.logo-stack { display: flex; flex-direction: column; }
-.logo-text { font-size: 24px; font-weight: 900; letter-spacing: -0.5px; background: linear-gradient(135deg, #ffffff 0%, #00f2fe 50%, #c084fc 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-
-.beta-tag { background: rgba(244, 114, 182, 0.25); border: 1px solid rgba(244, 114, 182, 0.5); color: var(--neon-pink); font-size: 10px; font-weight: 800; padding: 2px 8px; border-radius: 10px; letter-spacing: 0.5px; }
-.tagline-badge.prism-badge { font-size: 10px; font-weight: 800; color: var(--neon-pink); letter-spacing: 1.5px; text-transform: uppercase; filter: drop-shadow(0 0 6px rgba(244, 114, 182, 0.6)); }
-
-.header-actions { display: flex; align-items: center; gap: 10px; }
-.user-level-badge { background: var(--ios-gold-gradient); color: #030308; font-weight: 900; padding: 6px 14px; border-radius: 18px; font-size: 13px; box-shadow: 0 4px 15px rgba(251, 191, 36, 0.4); }
-
-.crystal-input-sm { background: rgba(3, 3, 8, 0.65) !important; border: 1px solid var(--specular-border) !important; border-radius: 16px !important; padding: 6px 12px !important; color: white !important; font-size: 12px !important; }
-
-/* 📈 LIVE TICKER TAPE BAR */
-.ticker-tape-container {
-    width: 100%;
-    background: rgba(3, 3, 8, 0.85);
-    border-bottom: 1px solid var(--specular-border);
-    padding: 6px 0;
-    overflow: hidden;
-    white-space: nowrap;
-    z-index: 15;
-}
-
-.ticker-tape-scroll {
-    display: inline-block;
-    padding-left: 100%;
-    animation: tickerScroll 25s linear infinite;
-    font-size: 13px;
-    font-weight: 800;
-    color: var(--neon-cyan);
-    letter-spacing: 0.5px;
-}
-
-@keyframes tickerScroll {
-    0% { transform: translateX(0); }
-    100% { transform: translateX(-100%); }
-}
-
-/* 🔊 SOUNDBOARD FLOATING BAR */
-.soundboard-bar { display: flex; align-items: center; gap: 8px; background: rgba(18, 15, 38, 0.7); backdrop-filter: blur(20px); padding: 6px 16px; border-radius: 20px; border: 1px solid var(--specular-border); margin-top: 10px; z-index: 20; }
-.soundboard-title { font-size: 12px; font-weight: 700; color: var(--text-secondary); }
-.sound-fx-btn { background: rgba(255, 255, 255, 0.08); border: 1px solid var(--specular-border); color: white; padding: 4px 12px; border-radius: 14px; font-size: 12px; font-weight: 700; cursor: pointer; transition: all 0.2s ease; }
-.sound-fx-btn:active { transform: scale(0.92); }
-.sound-fx-btn:hover { background: rgba(0, 242, 254, 0.2); border-color: var(--neon-cyan); }
-
-/* ✨ ANIMATED ASCII TERMINAL BOX */
-.ascii-terminal-subpanel {
-    background: rgba(0, 0, 0, 0.85);
-    border: 2px solid var(--neon-cyan);
-    border-radius: 24px;
-    padding: 20px;
-    box-shadow: 0 0 35px rgba(0, 242, 254, 0.35), inset 0 0 20px rgba(0, 0, 0, 0.9);
+    width: 92%;
+    max-width: 1000px;
+    margin-top: 20px;
+    padding: 12px 24px;
+    background: rgba(15, 17, 26, 0.7);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid var(--panel-border);
+    border-radius: 30px;
     display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 20;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.genie-icon {
+    font-size: 26px;
+}
+
+.logo-stack {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.logo-text {
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: -0.4px;
+    color: var(--text-main);
+}
+
+.beta-tag {
+    background: rgba(244, 114, 182, 0.15);
+    border: 1px solid rgba(244, 114, 182, 0.3);
+    color: var(--accent-pink);
+    font-size: 11px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 8px;
+}
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.user-level-badge {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--panel-border);
+    color: var(--text-main);
+    font-weight: 600;
+    padding: 6px 14px;
+    border-radius: 16px;
+    font-size: 13px;
+}
+
+.crystal-input-sm {
+    background: rgba(15, 17, 26, 0.8) !important;
+    border: 1px solid var(--panel-border) !important;
+    border-radius: 14px !important;
+    padding: 6px 12px !important;
+    color: var(--text-main) !important;
+    font-size: 13px !important;
+    font-family: var(--font-main) !important;
+    cursor: pointer;
+}
+
+/* Minimalist Tab Navigation Bar */
+.nav-tabs-container.crystal-nav {
+    display: flex;
+    gap: 4px;
+    background: rgba(15, 17, 26, 0.6);
+    backdrop-filter: blur(20px);
+    padding: 4px;
+    border-radius: 20px;
+    border: 1px solid var(--panel-border);
+    margin: 20px 0 25px 0;
+    z-index: 20;
+    max-width: 95%;
+    overflow-x: auto;
+}
+
+.nav-tab.crystal-tab {
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    padding: 8px 18px;
+    font-family: var(--font-main);
+    font-size: 13px;
+    font-weight: 500;
+    border-radius: 16px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.2s ease;
+}
+
+.nav-tab.crystal-tab:hover {
+    color: var(--text-main);
+    background: rgba(255, 255, 255, 0.04);
+}
+
+.nav-tab.crystal-tab.active {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--text-main);
+    font-weight: 600;
+    border: 1px solid var(--panel-border);
+}
+
+/* Main Layout & Cards */
+.main-container {
+    width: 100%;
+    max-width: 820px;
+    padding: 0 20px 40px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 10;
+}
+
+.tab-content {
+    display: none;
+    width: 100%;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.tab-content.active { display: flex; }
+
+.crystal-panel {
+    background: var(--panel-bg);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--panel-border);
+    border-radius: var(--radius-lg);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+    transition: border-color 0.2s ease, transform 0.2s ease;
+}
+
+.crystal-panel:hover {
+    border-color: var(--panel-border-hover);
+}
+
+/* Modern Genie Mind Crystal Orb */
+.genie-orb-wrap {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 5px;
+}
+
+.crystal-orb {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%, rgba(56, 189, 248, 0.4), rgba(168, 85, 247, 0.4));
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 0 35px rgba(56, 189, 248, 0.3);
+    display: flex;
+    align-items: center;
     justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.genie-avatar {
+    font-size: 50px;
+}
+
+.genie-status-badge.crystal-badge {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--panel-border);
+    padding: 6px 18px;
+    border-radius: 16px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-muted);
+}
+
+/* Card Content Styling */
+.game-card { width: 100%; padding: 36px; text-align: center; }
+.welcome-screen { display: flex; flex-direction: column; align-items: center; gap: 16px; }
+
+.glow-title.crystal-title {
+    font-size: 30px;
+    font-weight: 700;
+    letter-spacing: -0.6px;
+    color: var(--text-main);
+}
+
+.subtitle {
+    color: var(--text-muted);
+    font-size: 15px;
+    line-height: 1.6;
+    max-width: 500px;
+}
+
+.tagline-banner.crystal-banner {
+    background: rgba(56, 189, 248, 0.08);
+    border: 1px solid rgba(56, 189, 248, 0.2);
+    padding: 8px 20px;
+    border-radius: 16px;
+    color: var(--accent-cyan);
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.stats-row { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
+.stat-pill.crystal-pill {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--panel-border);
+    padding: 6px 14px;
+    border-radius: 12px;
+    font-size: 13px;
+    color: var(--text-muted);
+}
+
+.action-buttons, .answers-grid {
+    display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; width: 100%; margin-top: 10px;
+}
+
+/* Buttons */
+.crystal-btn {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--panel-border);
+    color: var(--text-main);
+    padding: 10px 20px;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: var(--font-main);
+    border-radius: 14px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.crystal-btn:hover {
+    background: rgba(255, 255, 255, 0.09);
+    border-color: var(--panel-border-hover);
+    transform: translateY(-1px);
+}
+
+.crystal-btn:active { transform: scale(0.98); }
+
+.crystal-btn.primary-prism, .primary-btn.crystal-btn-large {
+    background: var(--primary-gradient);
+    color: #ffffff;
+    font-weight: 600;
+    border: none;
+    box-shadow: 0 6px 20px rgba(56, 189, 248, 0.3);
+}
+
+.primary-btn.crystal-btn-large {
+    padding: 14px 32px;
+    font-size: 16px;
+    border-radius: 16px;
+}
+
+.primary-btn.crystal-btn-large:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 25px rgba(56, 189, 248, 0.4);
+}
+
+.crystal-icon-btn {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--panel-border);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    color: white;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.crystal-icon-btn:hover { background: rgba(255, 255, 255, 0.1); }
+
+/* Inputs & Form Elements */
+.crystal-input {
+    background: rgba(15, 17, 26, 0.8) !important;
+    border: 1px solid var(--panel-border) !important;
+    border-radius: 14px !important;
+    padding: 12px 16px !important;
+    color: var(--text-main) !important;
+    font-size: 14px !important;
+    font-family: var(--font-main) !important;
+    transition: border-color 0.2s ease !important;
+}
+
+.crystal-input:focus {
+    border-color: var(--accent-cyan) !important;
+    outline: none !important;
+}
+
+.crystal-subpanel {
+    background: var(--panel-subbg);
+    border: 1px solid var(--panel-border);
+    border-radius: var(--radius-md);
+    padding: 20px;
+}
+
+/* Question & Answer Views */
+.question-container, .guess-card-container { display: flex; flex-direction: column; gap: 16px; align-items: center; }
+.progress-header { width: 100%; display: flex; justify-content: space-between; font-size: 13px; color: var(--text-muted); }
+.progress-bar-bg { width: 100%; height: 6px; background: rgba(255, 255, 255, 0.06); border-radius: 10px; overflow: hidden; }
+.progress-bar-fill { height: 100%; background: var(--primary-gradient); width: 0%; transition: width 0.4s ease; }
+
+.ans-btn {
+    flex: 1; min-width: 130px; padding: 14px 18px; border-radius: 16px; font-size: 16px; font-weight: 600;
+    border: 1px solid var(--panel-border); cursor: pointer; transition: all 0.2s ease;
+}
+.ans-btn.yes { background: rgba(16, 185, 129, 0.15); color: var(--accent-green); border-color: rgba(16, 185, 129, 0.3); }
+.ans-btn.no { background: rgba(244, 63, 94, 0.15); color: var(--accent-red); border-color: rgba(244, 63, 94, 0.3); }
+.ans-btn.skip { background: rgba(255, 255, 255, 0.05); color: var(--text-muted); }
+.ans-btn:hover { transform: translateY(-1px); }
+
+.media-frame {
+    width: 100%; max-width: 440px; max-height: 280px; border-radius: 16px; overflow: hidden;
+    border: 1px solid var(--panel-border); background: #000;
+}
+.media-frame img, .media-frame video { width: 100%; height: 100%; object-fit: contain; }
+
+/* Stock Market & Hall of Fame */
+.stock-card {
+    background: var(--panel-subbg);
+    border: 1px solid var(--panel-border);
+    border-radius: 16px;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.price-up { color: var(--accent-green); font-weight: 600; }
+.price-down { color: var(--accent-red); font-weight: 600; }
+
+.hof-card-item {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--panel-border);
+    border-radius: 18px;
+    padding: 16px 20px;
+    display: flex;
+    gap: 16px;
     align-items: center;
 }
 
-.ascii-code-box {
-    font-family: 'Fira Code', 'Courier New', monospace;
-    font-size: 13px;
-    line-height: 1.25;
-    color: var(--neon-cyan);
-    text-shadow: 0 0 10px var(--neon-cyan), 0 0 20px var(--neon-purple);
-    margin: 0;
-    text-align: left;
+.longevity-badge {
+    background: rgba(251, 191, 36, 0.15);
+    border: 1px solid rgba(251, 191, 36, 0.3);
+    color: var(--accent-gold);
+    font-size: 12px;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 10px;
 }
 
-/* iOS Crystal Buttons */
-.crystal-icon-btn { background: var(--ios-glass-bg); backdrop-filter: blur(25px); border: 1px solid var(--specular-border); border-top: 1px solid var(--specular-light); border-radius: 50%; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; font-size: 20px; color: white; cursor: pointer; transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 8px 20px rgba(0,0,0,0.4); }
-.crystal-icon-btn:active { transform: scale(0.92); }
+.badge-pill {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--panel-border);
+    color: var(--text-muted);
+    padding: 3px 10px;
+    border-radius: 10px;
+    font-size: 12px;
+}
 
-.crystal-btn { background: var(--ios-glass-bg); backdrop-filter: blur(30px) saturate(200%); -webkit-backdrop-filter: blur(30px) saturate(200%); border: 1px solid var(--specular-border); border-top: 1px solid var(--specular-light); color: white; padding: 12px 24px; font-size: 15px; font-weight: 700; font-family: var(--font-ios); border-radius: 25px; cursor: pointer; transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4); position: relative; overflow: hidden; }
-.crystal-btn:hover { box-shadow: 0 12px 35px rgba(0, 242, 254, 0.4); transform: translateY(-2px); }
-.crystal-btn:active { transform: scale(0.96); }
+.score-badge {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid var(--panel-border);
+    color: var(--text-main);
+    font-weight: 600;
+    padding: 6px 14px;
+    border-radius: 14px;
+    font-size: 13px;
+}
 
-.crystal-btn.primary-prism, .primary-btn.crystal-btn-large { background: var(--ios-primary-gradient); color: #030308; font-weight: 800; border: none; box-shadow: 0 10px 35px rgba(0, 242, 254, 0.6); }
-.primary-btn.crystal-btn-large { padding: 16px 36px; font-size: 18px; border-radius: 30px; }
-.primary-btn.crystal-btn-large:hover { transform: translateY(-2px) scale(1.03); box-shadow: 0 15px 45px rgba(0, 242, 254, 0.8); }
+.censor-badge.crystal-censor {
+    background: rgba(16, 185, 129, 0.1);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+    color: var(--accent-green);
+    font-size: 12px;
+    padding: 4px 12px;
+    border-radius: 10px;
+}
 
-/* iOS Segmented Navigation Bar */
-.nav-tabs-container.crystal-nav { display: flex; gap: 6px; background: rgba(18, 15, 38, 0.85); backdrop-filter: blur(40px) saturate(200%); padding: 6px; border-radius: 30px; border: 1px solid var(--specular-border); border-top: 1px solid var(--specular-light); margin: 15px 0 25px 0; z-index: 20; box-shadow: 0 15px 40px rgba(0,0,0,0.6); max-width: 98%; overflow-x: auto; }
-.nav-tab.crystal-tab { background: transparent; border: none; color: var(--text-secondary); padding: 10px 18px; font-family: var(--font-ios); font-size: 13px; font-weight: 700; border-radius: 24px; cursor: pointer; white-space: nowrap; transition: all 0.3s ease; }
-.nav-tab.crystal-tab.active { background: var(--ios-primary-gradient); color: #030308; font-weight: 800; box-shadow: 0 6px 25px rgba(0, 242, 254, 0.6); }
+.quick-bubble {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--panel-border);
+    color: var(--text-main);
+    padding: 6px 14px;
+    border-radius: 14px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
 
-/* Main Layout & Squircle Cards */
-.main-container { width: 100%; max-width: 880px; padding: 0 20px 40px 20px; display: flex; flex-direction: column; align-items: center; z-index: 10; }
-.tab-content { display: none; width: 100%; flex-direction: column; align-items: center; gap: 20px; }
-.tab-content.active { display: flex; }
+.quick-bubble:hover { background: rgba(255, 255, 255, 0.08); }
 
-.crystal-panel { background: var(--ios-glass-bg); backdrop-filter: blur(40px) saturate(210%); -webkit-backdrop-filter: blur(40px) saturate(210%); border: 1px solid var(--specular-border); border-top: 1px solid var(--specular-light); border-radius: var(--squircle-radius); box-shadow: 0 30px 70px rgba(0, 0, 0, 0.6), inset 0 1px 2px rgba(255, 255, 255, 0.3); transition: transform 0.25s ease-out, box-shadow 0.3s ease; }
+.chat-feed.crystal-feed {
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--panel-border);
+    border-radius: 16px;
+    padding: 14px;
+    height: 250px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
 
-/* MEMEX STOCK MARKET & HALL OF FAME STYLING */
-.stock-card { background: var(--ios-glass-subpanel); border: 1px solid var(--specular-border); border-radius: 20px; padding: 16px; display: flex; flex-direction: column; gap: 10px; }
-.price-up { color: var(--neon-green); font-weight: 800; }
-.price-down { color: var(--neon-red); font-weight: 800; }
-
-.hof-card-item { background: linear-gradient(135deg, rgba(251,191,36,0.1), rgba(18,15,38,0.7)); border: 1px solid rgba(251,191,36,0.4); border-top: 1px solid rgba(255,255,255,0.5); border-radius: 24px; padding: 20px; display: flex; gap: 20px; align-items: center; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-.longevity-badge { background: rgba(251, 191, 36, 0.2); border: 1px solid rgba(251, 191, 36, 0.5); color: var(--neon-gold); font-size: 12px; font-weight: 800; padding: 4px 12px; border-radius: 12px; }
-
-/* Liquid Genie Crystal Orb & Skin Glows */
-.genie-orb-wrap { position: relative; display: flex; flex-direction: column; align-items: center; gap: 14px; margin-bottom: 5px; }
-
-.crystal-orb { position: relative; width: 110px; height: 110px; border-radius: 50%; box-shadow: 0 0 45px rgba(0, 242, 254, 0.6), inset 0 -10px 20px rgba(0,0,0,0.5), inset 0 10px 15px rgba(255,255,255,0.7); display: flex; align-items: center; justify-content: center; animation: orbFloat 4s ease-in-out infinite; transition: all 0.5s ease; }
-.crystal-orb.skin-cyan { background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.5), rgba(0, 242, 254, 0.35) 40%, rgba(192, 132, 252, 0.5) 80%); box-shadow: 0 0 45px rgba(0, 242, 254, 0.6); }
-.crystal-orb.skin-ruby { background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.5), rgba(239, 68, 68, 0.45) 40%, rgba(244, 114, 182, 0.5) 80%); box-shadow: 0 0 45px rgba(239, 68, 68, 0.7); }
-.crystal-orb.skin-sapphire { background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.5), rgba(59, 130, 246, 0.45) 40%, rgba(147, 51, 234, 0.5) 80%); box-shadow: 0 0 45px rgba(59, 130, 246, 0.7); }
-.crystal-orb.skin-emerald { background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.5), rgba(16, 185, 129, 0.45) 40%, rgba(52, 211, 153, 0.5) 80%); box-shadow: 0 0 45px rgba(16, 185, 129, 0.7); }
-.crystal-orb.skin-amethyst { background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.5), rgba(168, 85, 247, 0.45) 40%, rgba(236, 72, 153, 0.5) 80%); box-shadow: 0 0 45px rgba(168, 85, 247, 0.7); }
-
-.orb-inner-glow { position: absolute; width: 100%; height: 100%; border-radius: 50%; background: radial-gradient(circle, rgba(255,255,255,0.9) 0%, transparent 60%); animation: pulseInner 2.5s ease-in-out infinite; }
-.orb-energy-ring { position: absolute; width: 130px; height: 130px; border-radius: 50%; border: 2px solid rgba(0, 242, 254, 0.4); animation: ringSpin 6s linear infinite; }
-.orb-energy-ring.outer { width: 155px; height: 155px; border-color: rgba(244, 114, 182, 0.3); animation: ringSpinReverse 9s linear infinite; }
-
-.genie-avatar { font-size: 65px; z-index: 3; filter: drop-shadow(0 10px 20px rgba(0,0,0,0.5)); }
-.genie-status-badge.crystal-badge { background: rgba(0, 242, 254, 0.15); border: 1px solid rgba(0, 242, 254, 0.4); border-top: 1px solid rgba(255, 255, 255, 0.5); padding: 7px 22px; border-radius: 20px; font-size: 14px; font-weight: 700; color: #e0f2fe; backdrop-filter: blur(16px); box-shadow: 0 8px 25px rgba(0,0,0,0.4); }
-
-/* LEADERBOARD TABLE STYLING */
-.lb-table tr { border-bottom: 1px solid rgba(255,255,255,0.06); }
-.lb-table tr:hover { background: rgba(255,255,255,0.05); }
-
-/* Card Content Styling */
-.game-card { width: 100%; padding: 38px; text-align: center; }
-.welcome-screen { display: flex; flex-direction: column; align-items: center; gap: 20px; }
-
-.glow-title.crystal-title { font-size: 34px; font-weight: 900; letter-spacing: -0.5px; background: linear-gradient(135deg, #ffffff 0%, #e2e8f0 50%, #00f2fe 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-.subtitle { color: var(--text-secondary); font-size: 15px; line-height: 1.5; max-width: 520px; }
-
-.tagline-banner.crystal-banner { background: linear-gradient(135deg, rgba(0, 242, 254, 0.18), rgba(244, 114, 182, 0.18)); border: 1px solid rgba(0, 242, 254, 0.4); border-top: 1px solid rgba(255, 255, 255, 0.5); padding: 10px 24px; border-radius: 20px; color: #38bdf8; box-shadow: 0 0 25px rgba(0, 242, 254, 0.3); }
-
-.stats-row { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
-.stat-pill.crystal-pill { background: rgba(255, 255, 255, 0.06); border: 1px solid var(--specular-border); backdrop-filter: blur(12px); padding: 6px 18px; border-radius: 14px; font-size: 13px; color: #cbd5e1; }
-
-.action-buttons, .answers-grid { display: flex; gap: 15px; flex-wrap: wrap; justify-content: center; width: 100%; margin-top: 15px; }
-
-/* Question & Guess View */
-.question-container, .guess-card-container { display: flex; flex-direction: column; gap: 20px; align-items: center; }
-.progress-header { width: 100%; display: flex; justify-content: space-between; font-size: 13px; color: var(--text-secondary); }
-.progress-bar-bg { width: 100%; height: 8px; background: rgba(255, 255, 255, 0.1); border-radius: 10px; overflow: hidden; }
-.progress-bar-fill { height: 100%; background: var(--ios-primary-gradient); width: 0%; transition: width 0.5s ease; }
-.question-text.crystal-title { font-size: 26px; font-weight: 800; line-height: 1.3; }
-
-.ans-btn { flex: 1; min-width: 140px; padding: 16px 20px; border-radius: 20px; font-size: 18px; font-weight: 800; border: 1px solid var(--specular-border); border-top: 1px solid var(--specular-light); cursor: pointer; transition: all 0.2s ease; }
-.ans-btn.yes { background: linear-gradient(135deg, #10b981, #059669); color: white; box-shadow: 0 8px 25px rgba(16,185,129,0.4); }
-.ans-btn.no { background: linear-gradient(135deg, #ef4444, #dc2626); color: white; box-shadow: 0 8px 25px rgba(239,68,68,0.4); }
-.ans-btn.skip { background: rgba(255, 255, 255, 0.1); color: #cbd5e1; }
-.ans-btn:active { transform: scale(0.95); }
-
-.media-frame { width: 100%; max-width: 480px; max-height: 320px; border-radius: 20px; overflow: hidden; border: 2px solid var(--specular-border); box-shadow: 0 20px 40px rgba(0,0,0,0.6); background: #000; }
-.media-frame img, .media-frame video { width: 100%; height: 100%; object-fit: contain; }
-
-/* Match Arena, Friends & Chat Cards */
-.match-arena-card, .friends-card, .chat-container-card { width: 100%; padding: 32px; display: flex; flex-direction: column; gap: 20px; }
-
-.crystal-input { background: rgba(3, 3, 8, 0.65) !important; border: 1px solid var(--specular-border) !important; border-top: 1px solid var(--specular-light) !important; border-radius: 18px !important; padding: 14px 20px !important; color: white !important; font-size: 15px !important; backdrop-filter: blur(16px) !important; transition: all 0.3s ease !important; }
-.crystal-input:focus { border-color: var(--neon-cyan) !important; box-shadow: 0 0 20px var(--neon-cyan) !important; outline: none !important; }
-
-.crystal-subpanel { background: var(--ios-glass-subpanel); border: 1px solid var(--specular-border); border-top: 1px solid var(--specular-light); border-radius: 22px; padding: 20px; }
-.score-badge { background: var(--ios-gold-gradient); color: #030308; font-weight: 800; padding: 8px 18px; border-radius: 18px; font-size: 14px; }
-.censor-badge.crystal-censor { background: rgba(16, 185, 129, 0.18); border: 1px solid rgba(16, 185, 129, 0.4); color: #10b981; font-size: 12px; padding: 4px 14px; border-radius: 14px; }
-.quick-bubble { background: rgba(192, 132, 252, 0.2); border: 1px solid rgba(192, 132, 252, 0.4); color: #e9d5ff; padding: 7px 16px; border-radius: 18px; font-size: 13px; font-weight: 700; cursor: pointer; transition: all 0.2s ease; }
-.quick-bubble:active { transform: scale(0.95); }
-
-.chat-feed.crystal-feed { background: rgba(0, 0, 0, 0.45); border: 1px solid var(--specular-border); border-radius: 20px; padding: 16px; height: 260px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
-.chat-msg { background: rgba(255, 255, 255, 0.08); padding: 10px 16px; border-radius: 14px; font-size: 14px; }
+.chat-msg { background: rgba(255, 255, 255, 0.04); padding: 8px 14px; border-radius: 12px; font-size: 13.5px; }
 
 /* Modal */
-.modal-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(12px); display: none; align-items: center; justify-content: center; z-index: 999; }
+.modal-overlay {
+    position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(10px); display: none; align-items: center; justify-content: center; z-index: 999;
+}
 .modal-overlay.active { display: flex; }
-.modal-content { width: 90%; max-width: 550px; padding: 32px; }
-.modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-.close-btn { background: none; border: none; font-size: 28px; color: var(--text-secondary); cursor: pointer; }
-.app-footer { padding: 24px; font-size: 13px; color: var(--text-secondary); text-align: center; }
-
-/* Keyframes */
-@keyframes orbFloat { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-10px); } }
-@keyframes pulseInner { 0%, 100% { opacity: 0.6; } 50% { opacity: 1; } }
-@keyframes ringSpin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-@keyframes ringSpinReverse { 0% { transform: rotate(360deg); } 100% { transform: rotate(0deg); } }
-@keyframes crystalGlow { 0%, 100% { filter: drop-shadow(0 0 8px var(--neon-cyan)); } 50% { filter: drop-shadow(0 0 18px var(--neon-cyan)); } }
-@keyframes floatGenie { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-6px); } }
+.modal-content { width: 90%; max-width: 500px; padding: 28px; }
+.modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+.close-btn { background: none; border: none; font-size: 24px; color: var(--text-muted); cursor: pointer; }
+.app-footer { padding: 24px; font-size: 13px; color: var(--text-dim); text-align: center; }
