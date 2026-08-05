@@ -2,29 +2,26 @@
 
 **Date:** August 5, 2026  
 **Tagline:** MADE BY MEMERS, MADE FOR MEMERS 🔥  
-**Edition:** v5.0.0-Beta (Memer Community Portal & Onboarding Journey) Complete
+**Edition:** v5.1.0-Beta (MemeTV Random Video Chat & Responsive Resizing) Complete
 
 ---
 
 ## 1. Executive Summary & Codebase Architecture
 
-The **Meme Genie** application has reached version **v5.0.0-Beta**:
-1. **Phase 1: Dynamic Parallax Landing & Login**: Scroll-driven hero page with user authentication.
-2. **Phase 2: 10-Question Meme IQ Calibration**: Quiz evaluating meme knowledge and calibrating Meme IQ tier (e.g. *Meme IQ 145 - GigaChad Tier*).
-3. **Phase 3: Spotify-Style Meme Taste Selection**: Black & White to Full Vibrant Color grid interaction.
-4. **Phase 4: Instagram-Style Main Portal**: For You Page (FYP) scrollable meme feed with upvoting, Mind Reader, Free Web RAG Search, Media Studio, MemeX Stock Market, Hall of Fame, WebSockets Match Arena, and Profile.
+The **Meme Genie** application has reached version **v5.1.0-Beta**:
+1. **MemeTV Video Roulette** (`backend/routes/video_routes.py` & WebRTC `RTCPeerConnection`): 1-on-1 video call matching strangers by Meme IQ proximity with WebSocket signaling.
+2. **Site-Wide Responsive Resizing**: Media queries (`@media (max-width: 768px)`, `@media (max-width: 480px)`), aspect ratio frames, and clean mobile navigation.
+3. **4-Phase Onboarding Journey**: Landing -> 10-Q Meme IQ Quiz -> Spotify B&W Taste Grid -> Instagram FYP Portal.
 
 ---
 
 ## 2. Completed Features
 
-- [x] **4-Phase User Journey** (`frontend/game.js`, `frontend/index.html`, `frontend/style.css`)
-- [x] **Meme IQ Calibration Quiz** (`backend/routes/onboarding_routes.py`)
-- [x] **Spotify-Style B&W to Color Taste Selection** (`backend/models/onboarding_model.py`)
-- [x] **Instagram For You Page (FYP) Feed Engine** (`backend/feed_engine.py` & `backend/routes/feed_routes.py`)
-- [x] **MemeX Virtual Stock Exchange** (`backend/economy_engine.py`)
-- [x] **Immortal Meme Hall of Fame** (`backend/hall_of_fame_engine.py`)
-- [x] **Free RAG Web Search Engine** (`backend/rag_engine.py`)
+- [x] **MemeTV Random Video Chat (Omegle/OmeTV)** (`backend/routes/video_routes.py`, `frontend/game.js`)
+- [x] **Site-Wide Responsive Layout Resizing** (`frontend/style.css`, `frontend/index.html`)
+- [x] **4-Phase User Journey** (`backend/routes/onboarding_routes.py`)
+- [x] **Instagram FYP Feed Engine** (`backend/feed_engine.py`)
+- [x] **MemeX Stock Exchange & Hall of Fame** (`backend/economy_engine.py`, `backend/hall_of_fame_engine.py`)
 
 ---
 
@@ -36,4 +33,4 @@ uvicorn backend.main:app --reload --port 8000
 
 ---
 
-*Document updated on August 5, 2026 after completing v5.0.0-Beta Release.*
+*Document updated on August 5, 2026 after completing v5.1.0-Beta Release.*

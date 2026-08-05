@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Meme Genie 🧞‍♂️ | The Memer Community Portal</title>
+    <title>Meme Genie 🧞‍♂️ | MemeTV & Social Portal</title>
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -17,7 +17,6 @@
          PHASE 1: DYNAMIC PARALLAX LANDING & LOGIN PAGE
          ========================================================================== -->
     <div id="viewLanding" class="app-phase active">
-        <!-- Landing Top Header -->
         <header class="landing-header">
             <div class="logo">
                 <span class="genie-icon">🧞‍♂️</span>
@@ -29,33 +28,31 @@
             </div>
         </header>
 
-        <!-- Parallax Hero Section -->
         <section class="landing-hero" id="landingHero">
             <div class="hero-badge">🔥 MADE BY MEMERS, MADE FOR MEMERS</div>
-            <h1 class="hero-title">The Ultimate Social Portal & Mind-Reader for True Memers</h1>
-            <p class="hero-subtitle">Connect with high-IQ memers worldwide, trade meme stock shares, publish custom memes, and let Genie read your mind.</p>
+            <h1 class="hero-title">The Ultimate Social Portal & MemeTV Video Roulette</h1>
+            <p class="hero-subtitle">Connect with high-IQ memers worldwide, video call random strangers on MemeTV, trade meme stock shares, and let Genie read your mind.</p>
             <div class="hero-cta-group">
                 <button class="primary-btn crystal-btn-large" onclick="openLoginModal('register')">🚀 Enter Memer Portal</button>
                 <button class="crystal-btn" onclick="openLoginModal('login')">🔑 Existing Memer Login</button>
             </div>
         </section>
 
-        <!-- Dynamic Scroll Feature Sections -->
         <section class="landing-features" id="landingFeatures">
+            <div class="feature-card">
+                <div class="feature-icon">📹</div>
+                <h3>MemeTV Video Roulette</h3>
+                <p>1-on-1 random video chat matching strangers based on their calibrated Meme IQ Level.</p>
+            </div>
             <div class="feature-card">
                 <div class="feature-icon">🔮</div>
                 <h3>AI Mind Reading</h3>
-                <p>Think of any viral meme and Genie will guess it in seconds using tag-scoring entropy algorithms.</p>
+                <p>Think of any viral meme and Genie will guess it in seconds using tag-scoring algorithms.</p>
             </div>
             <div class="feature-card">
                 <div class="feature-icon">📈</div>
                 <h3>MemeX Stock Exchange</h3>
                 <p>Trade shares in viral memes ($CHAD, $DOGE, $RICK) with MEME coins and grow your net worth.</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon">🏆</div>
-                <h3>Longevity Analytics</h3>
-                <p>Track viral meme lifespans, peak virality scores, and upvote immortal Hall of Fame legends.</p>
             </div>
             <div class="feature-card">
                 <div class="feature-icon">🔍</div>
@@ -96,17 +93,16 @@
          PHASE 2: MANDATORY 10-QUESTION MEME IQ CALIBRATION QUIZ
          ========================================================================== -->
     <div id="viewMemeIQ" class="app-phase" style="display:none;">
-        <div class="crystal-panel quiz-panel" style="width:100%; max-width:680px; padding:36px; margin:40px auto; text-align:center;">
+        <div class="crystal-panel quiz-panel">
             <div class="quiz-badge">🧠 MEME IQ CALIBRATION (10 QUESTIONS)</div>
             <h2 class="crystal-title" style="margin-top:10px;" id="iqQuizTitle">Question 1 of 10</h2>
             <div class="progress-bar-bg" style="margin:16px 0;"><div class="progress-bar-fill" id="iqQuizProgress" style="width:10%;"></div></div>
 
             <div id="iqQuestionContainer" style="margin-top:20px;">
                 <h3 id="iqQuestionText" style="font-size:20px; font-weight:600;">Loading Meme IQ Question...</h3>
-                <div id="iqOptionsGrid" style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:20px;"></div>
+                <div id="iqOptionsGrid" class="options-grid"></div>
             </div>
 
-            <!-- Quiz Result Card -->
             <div id="iqResultContainer" style="display:none; margin-top:20px;">
                 <div style="font-size:50px;">👑</div>
                 <h1 style="font-size:32px; font-weight:800; color:var(--accent-gold);" id="resIqScore">Meme IQ 145</h1>
@@ -121,7 +117,7 @@
          PHASE 3: SPOTIFY-STYLE MEME TASTE SELECTION (B&W TO COLOR)
          ========================================================================== -->
     <div id="viewTaste" class="app-phase" style="display:none;">
-        <div class="crystal-panel taste-panel" style="width:100%; max-width:880px; padding:36px; margin:40px auto; text-align:center;">
+        <div class="crystal-panel taste-panel">
             <div class="quiz-badge">🎨 SPOTIFY TASTE ONBOARDING</div>
             <h2 class="crystal-title" style="margin-top:10px;">Which memes do you know & love?</h2>
             <p class="subtitle" style="margin:6px auto 20px auto;">Click on your favorite memes. Black & White cards burst into full vibrant color when selected!</p>
@@ -136,13 +132,12 @@
          PHASE 4: INSTAGRAM-STYLE SOCIAL PORTAL & FYP FEED
          ========================================================================== -->
     <div id="viewPortal" class="app-phase" style="display:none;">
-        <!-- Header -->
         <header class="app-header crystal-header">
             <div class="logo">
                 <span class="genie-icon">🧞‍♂️</span>
                 <div class="logo-stack">
                     <span class="logo-text">Meme Genie</span>
-                    <span class="beta-tag">v5.0.0-Beta</span>
+                    <span class="beta-tag">v5.1.0-Beta</span>
                 </div>
             </div>
             <div class="header-actions">
@@ -158,9 +153,9 @@
             </div>
         </header>
 
-        <!-- Instagram-Style Portal Tabs Nav -->
         <nav class="nav-tabs-container crystal-nav">
             <button class="nav-tab crystal-tab active" id="tabFyp" onclick="switchPortalTab('fyp')">📰 For You Page</button>
+            <button class="nav-tab crystal-tab" id="tabVideo" onclick="switchPortalTab('video')">📹 MemeTV Video</button>
             <button class="nav-tab crystal-tab" id="tabGenie" onclick="switchPortalTab('genie')">🔮 Mind Reader</button>
             <button class="nav-tab crystal-tab" id="tabRag" onclick="switchPortalTab('rag')">🔍 Web Search</button>
             <button class="nav-tab crystal-tab" id="tabStudio" onclick="switchPortalTab('studio')">🎨 Media & Studio</button>
@@ -174,12 +169,45 @@
         <main class="main-container">
             <!-- 1. FOR YOU PAGE (FYP FEED) -->
             <div class="portal-tab-content active" id="portalFyp">
-                <div id="fypFeedContainer" style="width:100%; max-width:550px; display:flex; flex-direction:column; gap:20px;">
+                <div id="fypFeedContainer" class="feed-list">
                     <div class="crystal-subpanel" style="text-align:center;">Loading FYP Feed...</div>
                 </div>
             </div>
 
-            <!-- 2. MIND READER -->
+            <!-- 2. MEMETV RANDOM STRANGER VIDEO CHAT -->
+            <div class="portal-tab-content" id="portalVideo">
+                <div class="crystal-panel video-chat-card">
+                    <div class="video-header">
+                        <div>
+                            <h2 class="crystal-title">📹 MemeTV Random Stranger Video Call</h2>
+                            <p class="subtitle">Match 1-on-1 with strangers based on your calibrated Meme IQ Level!</p>
+                        </div>
+                        <div class="quiz-badge" id="videoMatchStatus">Status: Idle</div>
+                    </div>
+
+                    <div class="video-streams-grid">
+                        <div class="video-box local">
+                            <video id="localVideo" autoplay muted playsinline></video>
+                            <span class="video-label">You (<span id="localMemeIqLabel">Meme IQ 120</span>)</span>
+                        </div>
+                        <div class="video-box remote">
+                            <video id="remoteVideo" autoplay playsinline></video>
+                            <div class="video-placeholder" id="remotePlaceholder">
+                                <span>📹 Waiting for Stranger match...</span>
+                            </div>
+                            <span class="video-label" id="remoteStrangerLabel">Stranger (Searching...)</span>
+                        </div>
+                    </div>
+
+                    <div class="video-controls-bar">
+                        <button class="primary-btn crystal-btn-large" id="btnTvSearch" onclick="startMemeTvSearch()">⚡ Start Searching</button>
+                        <button class="crystal-btn" id="btnTvNext" onclick="nextMemeTvStranger()">➡️ Next Stranger</button>
+                        <button class="crystal-btn" style="background:rgba(244,63,94,0.2); color:var(--accent-red);" id="btnTvStop" onclick="stopMemeTvVideo()">🛑 Stop</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3. MIND READER -->
             <div class="portal-tab-content" id="portalGenie">
                 <div class="genie-orb-wrap" id="genieCard">
                     <div class="crystal-orb" id="mainCrystalOrb">
@@ -198,9 +226,9 @@
                 </div>
             </div>
 
-            <!-- 3. WEB SEARCH & RAG -->
+            <!-- 4. WEB SEARCH & RAG -->
             <div class="portal-tab-content" id="portalRag">
-                <div class="crystal-panel rag-card" style="width:100%; padding:32px;">
+                <div class="crystal-panel rag-card">
                     <h2 class="crystal-title">🔍 Free Web RAG Search Engine</h2>
                     <p class="subtitle">Search any meme, catchphrase, or viral trend live from the web for free.</p>
                     <div style="display:flex; gap:10px; margin-top:16px;">
@@ -213,12 +241,12 @@
                 </div>
             </div>
 
-            <!-- 4. MEDIA & STUDIO -->
+            <!-- 5. MEDIA & STUDIO -->
             <div class="portal-tab-content" id="portalStudio">
-                <div class="crystal-panel studio-card" style="width:100%; padding:32px;">
+                <div class="crystal-panel studio-card">
                     <h2 class="crystal-title">🎨 Meme Creator Studio</h2>
                     <p class="subtitle">Design custom memes, download PNGs, and 1-click publish to Genie memory.</p>
-                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-top:20px;">
+                    <div class="studio-workspace">
                         <div class="crystal-subpanel">
                             <label style="font-size:13px; color:var(--text-muted);">Select Template</label>
                             <select id="studioTemplateSelect" class="crystal-input" style="width:100%; margin-top:4px;" onchange="updateStudioMemeCanvas()">
@@ -245,9 +273,9 @@
                 </div>
             </div>
 
-            <!-- 5. MEME MARKET -->
+            <!-- 6. MEME MARKET -->
             <div class="portal-tab-content" id="portalEconomy">
-                <div class="crystal-panel economy-card" style="width:100%; padding:32px;">
+                <div class="crystal-panel economy-card">
                     <div style="display:flex; justify-content:space-between; align-items:center;">
                         <div>
                             <h2 class="crystal-title">📈 MemeX Stock Exchange</h2>
@@ -255,22 +283,22 @@
                         </div>
                         <div class="score-badge">Balance: 🪙 <span id="marketCoinBalance">1000</span> MEME</div>
                     </div>
-                    <div class="market-grid" style="display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap:16px; margin-top:20px;" id="stocksGrid"></div>
+                    <div class="market-grid" id="stocksGrid"></div>
                 </div>
             </div>
 
-            <!-- 6. HALL OF FAME -->
+            <!-- 7. HALL OF FAME -->
             <div class="portal-tab-content" id="portalHallOfFame">
-                <div class="crystal-panel hof-card" style="width:100%; padding:32px;">
+                <div class="crystal-panel hof-card">
                     <h2 class="crystal-title">🏆 Immortal Meme Hall of Fame</h2>
                     <p class="subtitle">Internet legends ranked by Duration of Virality & Community Upvotes.</p>
-                    <div class="hof-grid" style="display:grid; grid-template-columns: 1fr; gap:16px; margin-top:20px;" id="hofGrid"></div>
+                    <div class="hof-grid" id="hofGrid"></div>
                 </div>
             </div>
 
-            <!-- 7. MATCH ARENA -->
+            <!-- 8. MATCH ARENA -->
             <div class="portal-tab-content" id="portalArena">
-                <div class="crystal-panel match-arena-card" style="width:100%; padding:32px;">
+                <div class="crystal-panel match-arena-card">
                     <h2 class="crystal-title">⚔️ 5-Round Match Arena</h2>
                     <p class="subtitle">Match with friends via WebSockets! Speed guesses win maximum XP!</p>
                     <div class="arena-setup" id="arenaSetup" style="margin-top:20px; text-align:center;">
@@ -283,11 +311,11 @@
                 </div>
             </div>
 
-            <!-- 8. CHAT & FRIENDS -->
+            <!-- 9. CHAT & FRIENDS -->
             <div class="portal-tab-content" id="portalChat">
-                <div class="crystal-panel chat-container-card" style="width:100%; padding:32px;">
+                <div class="crystal-panel chat-container-card">
                     <h2 class="crystal-title">💬 Friends & Genie Chat</h2>
-                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-top:16px;">
+                    <div class="chat-friends-grid">
                         <div class="crystal-subpanel">
                             <h3 style="font-size:15px;">👥 Send Friend Request</h3>
                             <div style="display:flex; gap:8px; margin-top:8px;">
@@ -308,16 +336,16 @@
                 </div>
             </div>
 
-            <!-- 9. PROFILE -->
+            <!-- 10. PROFILE -->
             <div class="portal-tab-content" id="portalProfile">
-                <div class="crystal-panel profile-card" style="width:100%; max-width:600px; padding:36px; text-align:center;">
+                <div class="crystal-panel profile-card">
                     <div style="font-size:60px;" id="profAvatar">😎</div>
                     <h1 class="crystal-title" id="profUsername" style="margin-top:6px;">Guest Memer</h1>
                     <div style="margin-top:8px;">
                         <span class="quiz-badge" id="profIqBadge">🧠 Meme IQ: 145</span>
                         <span class="badge-pill" id="profTierBadge" style="margin-left:6px; color:var(--accent-gold);">🗿 GigaChad Tier</span>
                     </div>
-                    <div style="display:flex; justify-content:center; gap:20px; margin-top:20px;">
+                    <div style="display:flex; justify-content:center; gap:20px; margin-top:20px; flex-wrap:wrap;">
                         <div class="score-badge">Level <span id="profLevel">1</span></div>
                         <div class="score-badge">XP: <span id="profXp">150</span></div>
                         <div class="score-badge">Coins: 🪙 <span id="profCoins">1000</span></div>
@@ -331,7 +359,7 @@
         </main>
 
         <footer class="app-footer">
-            <p>Meme Genie 🧞‍♂️ &bull; MADE BY MEMERS, MADE FOR MEMERS &bull; v5.0.0-Beta</p>
+            <p>Meme Genie 🧞‍♂️ &bull; MADE BY MEMERS, MADE FOR MEMERS &bull; v5.1.0-Beta</p>
         </footer>
     </div>
 

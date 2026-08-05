@@ -13,12 +13,12 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 
-from routes import game_routes, rag_routes, social_routes, leaderboard_routes, websocket_routes, economy_routes, onboarding_routes, feed_routes
+from routes import game_routes, rag_routes, social_routes, leaderboard_routes, websocket_routes, economy_routes, onboarding_routes, feed_routes, video_routes
 
 app = FastAPI(
     title="Meme Genie API 🧞‍♂️",
-    description="Full-stack AI Meme Mind-Reader, Memer Portal & Stock Market (v5.0.0-Beta)",
-    version="5.0.0"
+    description="Full-stack AI Meme Mind-Reader, MemeTV & Stock Market (v5.1.0-Beta)",
+    version="5.1.0"
 )
 
 # Enable CORS for local development
@@ -39,6 +39,7 @@ app.include_router(websocket_routes.router, prefix="/api")
 app.include_router(economy_routes.router, prefix="/api")
 app.include_router(onboarding_routes.router, prefix="/api")
 app.include_router(feed_routes.router, prefix="/api")
+app.include_router(video_routes.router, prefix="/api")
 
 # Serve Frontend static assets
 frontend_dir = os.path.join(project_dir, "frontend")
