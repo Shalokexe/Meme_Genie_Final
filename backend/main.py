@@ -15,11 +15,12 @@ from routes.social_routes import router as social_router
 from routes.websocket_routes import router as ws_router
 from routes.rag_routes import router as rag_router
 from routes.leaderboard_routes import router as leaderboard_router
+from routes.economy_routes import router as economy_router
 
 app = FastAPI(
     title="Meme Genie 🧞‍♂️ API",
-    description="Interactive Meme Mind Reader, WebSockets Arena, Meme Studio, RAG Engine & Global Leaderboards",
-    version="4.0.0-beta"
+    description="Interactive Meme Mind Reader, MemeX Stock Exchange, Hall of Fame, WebSockets Arena, Meme Studio & RAG Engine",
+    version="4.1.0-beta"
 )
 
 # Enable CORS for cross-origin browser fetch calls
@@ -31,12 +32,13 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Include game, social, WebSocket, RAG, and Leaderboard API routes under /api
+# Include game, social, WebSocket, RAG, Leaderboard, and Economy API routes under /api
 app.include_router(game_router, prefix="/api")
 app.include_router(social_router, prefix="/api")
 app.include_router(ws_router, prefix="/api")
 app.include_router(rag_router, prefix="/api")
 app.include_router(leaderboard_router, prefix="/api")
+app.include_router(economy_router, prefix="/api")
 
 # Mount frontend static files directly at / (after API routes) so index.html, style.css, and game.js resolve seamlessly
 frontend_path = os.path.abspath(os.path.join(backend_dir, "..", "frontend"))

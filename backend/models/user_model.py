@@ -9,9 +9,11 @@ class UserProfile(BaseModel):
     score_total: int = 0
     xp: int = 150
     level: int = 1
-    badges: List[str] = ["Meme Novice"]
-    active_skin: str = "cyan"  # 'cyan', 'ruby', 'sapphire', 'emerald', 'amethyst'
-    friends: List[str] = []  # user_ids
+    coins: int = 1000  # Virtual MEME Coins
+    portfolio: Dict[str, int] = Field(default_factory=dict)  # { "CHAD": 5, "DOGE": 10 }
+    badges: List[str] = Field(default_factory=lambda: ["Meme Novice"])
+    active_skin: str = "cyan"
+    friends: List[str] = Field(default_factory=list)
 
 class FriendRequest(BaseModel):
     request_id: str
@@ -19,7 +21,7 @@ class FriendRequest(BaseModel):
     from_username: str
     to_user_id: str
     to_username: str
-    status: str = "pending"  # 'pending', 'accepted', 'rejected'
+    status: str = "pending"
 
 class FriendRequestCreate(BaseModel):
     from_user_id: str
@@ -27,7 +29,7 @@ class FriendRequestCreate(BaseModel):
 
 class FriendRequestAction(BaseModel):
     request_id: str
-    action: str  # 'accept' or 'reject'
+    action: str
 
 class ChatMessage(BaseModel):
     message_id: str
@@ -65,3 +67,9 @@ class MatchGuessSubmit(BaseModel):
 class SkinEquipRequest(BaseModel):
     user_id: str
     skin_name: str
+
+class MemeStockTradeRequest(BaseModel):
+    user_id: str
+    ticker: str
+    action: str  # 'buy' or 'sell'
+    shares: int = 1

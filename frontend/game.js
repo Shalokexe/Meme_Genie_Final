@@ -1,8 +1,8 @@
 /**
- * Meme Genie 🧞‍♂️ - Liquid Crystal & Soundboard Edition (v4.0.0-Beta)
+ * Meme Genie 🧞‍♂️ - MemeX Stock Exchange & Hall of Fame Engine (v4.1.0-Beta)
  * "MADE BY MEMERS, MADE FOR MEMERS"
- * Features Web Audio Meme Soundboard, Genie Personalities, Global Leaderboard,
- * Daily Challenge, Free RAG Web Search Engine, Meme Studio & WebSockets.
+ * Features MemeX Virtual Stock Market, Longevity Analytics Hall of Fame,
+ * Web Audio Soundboard, Genie Personalities, Global Leaderboards & RAG Search.
  */
 
 const API_BASE = "http://127.0.0.1:8000/api";
@@ -14,11 +14,13 @@ let currentUser = {
     avatar_emoji: "😎",
     xp: 150,
     level: 1,
+    coins: 1000,
+    portfolio: {},
     badges: ["Meme Novice"],
     active_skin: "cyan"
 };
 
-let currentGeniePersonality = "classic"; // 'classic', 'sassy', 'hypebeast', 'boomer'
+let currentGeniePersonality = "classic";
 let currentSessionId = null;
 let activeMatchRoomCode = null;
 let matchRoundStartTime = null;
@@ -177,7 +179,6 @@ function playMemeFx(fxName) {
         const now = ctx.currentTime;
 
         if (fxName === 'vineboom') {
-            // Vine Boom Sub-Bass Drop
             const osc = ctx.createOscillator();
             const gain = ctx.createGain();
             osc.connect(gain);
@@ -190,7 +191,6 @@ function playMemeFx(fxName) {
             osc.start(now);
             osc.stop(now + 0.6);
         } else if (fxName === 'bruh') {
-            // Bruh Pitch Tone
             const osc = ctx.createOscillator();
             const gain = ctx.createGain();
             osc.connect(gain);
@@ -203,7 +203,6 @@ function playMemeFx(fxName) {
             osc.start(now);
             osc.stop(now + 0.4);
         } else if (fxName === 'airhorn') {
-            // Multi-note Airhorn Burst
             [466.16, 466.16, 466.16, 622.25].forEach((freq, idx) => {
                 const o = ctx.createOscillator();
                 const g = ctx.createGain();
@@ -265,6 +264,14 @@ function switchTab(tabName) {
     if (tabName === 'genie') {
         document.getElementById("tabGenie").classList.add("active");
         document.getElementById("viewGenie").classList.add("active");
+    } else if (tabName === 'economy') {
+        document.getElementById("tabEconomy").classList.add("active");
+        document.getElementById("viewEconomy").classList.add("active");
+        fetchMarketData();
+    } else if (tabName === 'halloffame') {
+        document.getElementById("tabHallOfFame").classList.add("active");
+        document.getElementById("viewHallOfFame").classList.add("active");
+        fetchHallOfFame();
     } else if (tabName === 'leaderboard') {
         document.getElementById("tabLeaderboard").classList.add("active");
         document.getElementById("viewLeaderboard").classList.add("active");
@@ -309,6 +316,9 @@ function renderUserStatsUI() {
     document.getElementById("hdrLevel").innerText = currentUser.level || 1;
     document.getElementById("modalLevel").innerText = currentUser.level || 1;
     document.getElementById("userXp").innerText = currentUser.xp || 100;
+    document.getElementById("hdrCoins").innerText = currentUser.coins || 1000;
+    const mCoins = document.getElementById("marketCoinBalance");
+    if (mCoins) mCoins.innerText = currentUser.coins || 1000;
 
     const xpPercent = Math.min(100, ((currentUser.xp % 250) / 250) * 100);
     document.getElementById("xpBarFill").style.width = `${xpPercent}%`;
@@ -352,6 +362,101 @@ async function saveUserProfile(e) {
         closeProfileModal();
         alert("✅ Profile & Skin updated! Welcome " + currentUser.username);
     }
+}
+
+// --- 📈 MEMEX STOCK EXCHANGE ---
+async function fetchMarketData() {
+    try {
+        const res = await fetch(`${API_BASE}/economy/market`);
+        const data = await res.json();
+        
+        // Update live ticker tape text
+        const tape = document.getElementById("tickerTapeText");
+        if (tape && data.ticker_tape) tape.innerText = "📈 MEMEX MARKET: " + data.ticker_tape;
+
+        const grid = document.getElementById("stocksGrid");
+        if (grid && data.stocks) {
+            grid.innerHTML = data.stocks.map(s => {
+                const isUp = s.change_pct >= 0;
+                const owned = (currentUser.portfolio || {})[s.ticker] || 0;
+                return `
+                    <div class="stock-card">
+                        <div style="display:flex; justify-content:space-between; align-items:center;">
+                            <strong style="font-size:18px; color:var(--neon-cyan);">$${s.ticker}</strong>
+                            <span class="${isUp ? 'price-up' : 'price-down'}">${isUp ? '▲' : '▼'} ${s.change_pct}%</span>
+                        </div>
+                        <div style="font-size:14px; font-weight:700;">${s.name}</div>
+                        <div style="font-size:22px; font-weight:900; color:white;">🪙 ${s.price}</div>
+                        <div style="font-size:12px; color:var(--text-secondary);">Owned: ${owned} shares</div>
+                        <div style="display:flex; gap:8px; margin-top:8px;">
+                            <button class="crystal-btn" style="flex:1; padding:6px; font-size:12px; background:var(--neon-green); color:black;" onclick="executeMemeTrade('${s.ticker}', 'buy')">Buy 1 Share</button>
+                            <button class="crystal-btn" style="flex:1; padding:6px; font-size:12px; background:var(--neon-red); color:white;" onclick="executeMemeTrade('${s.ticker}', 'sell')">Sell 1 Share</button>
+                        </div>
+                    </div>
+                `;
+            }).join("");
+        }
+    } catch (e) {}
+}
+
+async function executeMemeTrade(ticker, action) {
+    try {
+        const res = await fetch(`${API_BASE}/economy/trade`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ user_id: currentUser.user_id, ticker: ticker, action: action, shares: 1 })
+        });
+        const data = await res.json();
+        if (res.ok) {
+            playMagicSound('victory');
+            currentUser.coins = data.user_coins;
+            currentUser.portfolio = data.user_portfolio;
+            renderUserStatsUI();
+            fetchMarketData();
+        } else {
+            alert("Trade Error: " + (data.detail || "Transaction failed"));
+        }
+    } catch (e) {}
+}
+
+// --- 🏆 IMMORTAL MEME HALL OF FAME ---
+async function fetchHallOfFame() {
+    try {
+        const res = await fetch(`${API_BASE}/halloffame/rankings`);
+        const data = await res.json();
+        const grid = document.getElementById("hofGrid");
+        if (grid && data.rankings) {
+            grid.innerHTML = data.rankings.map((m, idx) => `
+                <div class="hof-card-item">
+                    <div style="font-size:28px; font-weight:900; color:var(--neon-gold);">#${idx + 1}</div>
+                    <div class="media-frame" style="max-width:160px; max-height:110px;">
+                        <img src="${m.media_url}" alt="${m.name}">
+                    </div>
+                    <div style="flex:1;">
+                        <h3 class="crystal-title" style="font-size:20px;">${m.name}</h3>
+                        <div style="margin-top:4px;">
+                            <span class="longevity-badge">⏳ Longevity: ${m.longevity}</span>
+                            <span class="badge-pill" style="margin-left:6px; background:rgba(0,242,254,0.15); color:var(--neon-cyan);">⚡ Virality: ${m.peak_virality}%</span>
+                        </div>
+                        <p style="color:var(--text-secondary); font-size:13px; margin-top:6px;">${m.description || ''}</p>
+                    </div>
+                    <div style="display:flex; flex-direction:column; align-items:center; gap:6px;">
+                        <button class="crystal-btn" style="padding:8px 16px; font-size:13px; background:var(--ios-gold-gradient); color:#030308;" onclick="upvoteMeme('${m.id}')">🏆 Upvote (${m.upvotes})</button>
+                    </div>
+                </div>
+            `).join("");
+        }
+    } catch (e) {}
+}
+
+async function upvoteMeme(memeId) {
+    try {
+        const res = await fetch(`${API_BASE}/halloffame/vote?meme_id=${memeId}`, { method: "POST" });
+        if (res.ok) {
+            playMagicSound('victory');
+            fetchHallOfFame();
+        }
+    } catch (e) {}
 }
 
 // --- 📊 GLOBAL LEADERBOARD & DAILY CHALLENGE ---
@@ -937,4 +1042,6 @@ window.addEventListener("DOMContentLoaded", () => {
     initCrystalParticles();
     init3DCrystalTilt();
     syncUserProfile();
+    fetchMarketData();
+    setInterval(fetchMarketData, 8000);
 });
