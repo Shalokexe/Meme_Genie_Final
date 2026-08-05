@@ -9,11 +9,15 @@ class UserProfile(BaseModel):
     score_total: int = 0
     xp: int = 150
     level: int = 1
-    coins: int = 1000  # Virtual MEME Coins
-    portfolio: Dict[str, int] = Field(default_factory=dict)  # { "CHAD": 5, "DOGE": 10 }
+    coins: int = 1000
+    portfolio: Dict[str, int] = Field(default_factory=dict)
     badges: List[str] = Field(default_factory=lambda: ["Meme Novice"])
     active_skin: str = "cyan"
     friends: List[str] = Field(default_factory=list)
+    meme_iq: int = 120
+    meme_iq_tier: str = "Certified Memer"
+    favorite_memes: List[str] = Field(default_factory=list)
+    onboarding_complete: bool = False
 
 class FriendRequest(BaseModel):
     request_id: str
@@ -71,5 +75,5 @@ class SkinEquipRequest(BaseModel):
 class MemeStockTradeRequest(BaseModel):
     user_id: str
     ticker: str
-    action: str  # 'buy' or 'sell'
+    action: str
     shares: int = 1
