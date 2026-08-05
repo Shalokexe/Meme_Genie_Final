@@ -1,8 +1,8 @@
 /**
- * Meme Genie 🧞‍♂️ - MemeX Stock Exchange & Hall of Fame Engine (v4.1.0-Beta)
+ * Meme Genie 🧞‍♂️ - ASCII Magic & MemeX Engine (v4.1.0-Beta)
  * "MADE BY MEMERS, MADE FOR MEMERS"
- * Features MemeX Virtual Stock Market, Longevity Analytics Hall of Fame,
- * Web Audio Soundboard, Genie Personalities, Global Leaderboards & RAG Search.
+ * Features Frame-by-Frame Animated ASCII Genie, MemeX Virtual Stock Market,
+ * Longevity Analytics Hall of Fame, Web Audio Soundboard & RAG Search.
  */
 
 const API_BASE = "http://127.0.0.1:8000/api";
@@ -30,6 +30,84 @@ let speechSynth = window.speechSynthesis;
 let matchWebSocket = null;
 let chatPollInterval = null;
 let matchPollInterval = null;
+
+// Multi-Frame Animated ASCII Genie Rising from Magic Pot
+const ASCII_GENIE_FRAMES = [
+`
+             ☁️
+            ☁️ ☁️
+           (     )
+          (  ✨   )
+           (     )
+            \   /
+             '-'
+         .---.
+        /  🏺 \   [ FRAME 1: The Magic Pot slumbers... ]
+       |_______|
+`,
+`
+            .---.
+           /     \    ☁️
+          |  o.o  |  ✨
+           \  ^  /
+            '| |'
+             | |      ☁️ ~* Magic Smoke Rising! *~
+            /   \
+        .---'   '---.
+       /     🏺     \ [ FRAME 2: The Genie emerges! ]
+      |_______________|
+`,
+`
+            .---.
+           /     \   ✨
+          |  () () |   "YOUR MEME IS MY COMMAND!"
+           \  ===  /
+            '|||'
+             |||
+        .---'   '---.
+       /   .-----.   \   ✨
+      /   /  MEME \   \
+     |   |   GENIE |   |
+      \   \       /   /  [ FRAME 3: Full Power Unlocked! ]
+       '---'--🏺--'---'
+`,
+`
+            ✨ 🧞‍♂️ ✨
+             .---.
+            /     \   💥 "I HAVE READ YOUR MEME MIND!" 💥
+           |  ⚡ ⚡ |
+            \  ===  /
+             '|||'
+              |||
+         .---'   '---.
+        /  .-------.  \
+       /  /  MEME   \  \
+      |   |  GENIE  |   |
+       \  \  🏺🏺  /  /   [ FRAME 4: SUPREME MEME OVERLORD ]
+        '---'-----'---'
+`
+];
+
+let currentAsciiFrame = 0;
+let asciiAnimInterval = null;
+
+function startAsciiAnimationLoop() {
+    if (asciiAnimInterval) clearInterval(asciiAnimInterval);
+    const box = document.getElementById("asciiGenieBox");
+    if (!box) return;
+
+    asciiAnimInterval = setInterval(() => {
+        currentAsciiFrame = (currentAsciiFrame + 1) % ASCII_GENIE_FRAMES.length;
+        box.innerText = ASCII_GENIE_FRAMES[currentAsciiFrame];
+    }, 700);
+}
+
+function triggerAsciiSummon() {
+    playMemeFx('vineboom');
+    currentAsciiFrame = 3;
+    const box = document.getElementById("asciiGenieBox");
+    if (box) box.innerText = ASCII_GENIE_FRAMES[3];
+}
 
 // Template Preset Images for Meme Studio
 const MEME_TEMPLATES = {
@@ -264,6 +342,10 @@ function switchTab(tabName) {
     if (tabName === 'genie') {
         document.getElementById("tabGenie").classList.add("active");
         document.getElementById("viewGenie").classList.add("active");
+    } else if (tabName === 'ascii') {
+        document.getElementById("tabAscii").classList.add("active");
+        document.getElementById("viewAscii").classList.add("active");
+        startAsciiAnimationLoop();
     } else if (tabName === 'economy') {
         document.getElementById("tabEconomy").classList.add("active");
         document.getElementById("viewEconomy").classList.add("active");
@@ -370,7 +452,6 @@ async function fetchMarketData() {
         const res = await fetch(`${API_BASE}/economy/market`);
         const data = await res.json();
         
-        // Update live ticker tape text
         const tape = document.getElementById("tickerTapeText");
         if (tape && data.ticker_tape) tape.innerText = "📈 MEMEX MARKET: " + data.ticker_tape;
 

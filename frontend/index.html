@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Meme Genie 🧞‍♂️ | MemeX Stock Exchange & Hall of Fame Edition</title>
+    <title>Meme Genie 🧞‍♂️ | ASCII Magic & MemeX Edition</title>
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&family=Space+Grotesk:wght@500;700&family=Fira+Code:wght@500;700&display=swap" rel="stylesheet">
 </head>
 <body class="crystal-theme theme-cyan">
     <!-- Dynamic HTML5 Crystal Particle Canvas -->
@@ -67,6 +67,7 @@
     <!-- iOS Segmented Control Tabs -->
     <nav class="nav-tabs-container crystal-nav">
         <button class="nav-tab crystal-tab active" id="tabGenie" onclick="switchTab('genie')">🔮 Genie Reader</button>
+        <button class="nav-tab crystal-tab" id="tabAscii" onclick="switchTab('ascii')">✨ ASCII Magic Pot</button>
         <button class="nav-tab crystal-tab" id="tabEconomy" onclick="switchTab('economy')">📈 MemeX Stock Exchange</button>
         <button class="nav-tab crystal-tab" id="tabHallOfFame" onclick="switchTab('halloffame')">🏆 Hall of Fame</button>
         <button class="nav-tab crystal-tab" id="tabLeaderboard" onclick="switchTab('leaderboard')">📊 Leaderboard</button>
@@ -115,7 +116,25 @@
             </div>
         </div>
 
-        <!-- 2. MEMEX STOCK EXCHANGE TAB -->
+        <!-- 2. ANIMATED ASCII GENIE POT TAB -->
+        <div class="tab-content" id="viewAscii">
+            <div class="crystal-panel ascii-panel tilt-card" style="width:100%; padding:32px; text-align:center;">
+                <h2 class="crystal-title">✨ Animated ASCII Genie Pot</h2>
+                <p class="subtitle">Watch the magic Genie emerge from the ancient magic pot frame-by-frame!</p>
+
+                <div class="ascii-terminal-subpanel" style="margin-top:20px;">
+                    <pre id="asciiGenieBox" class="ascii-code-box">
+  Loading ASCII Animation...
+                    </pre>
+                </div>
+
+                <div class="action-buttons" style="margin-top:20px;">
+                    <button class="primary-btn crystal-btn" onclick="triggerAsciiSummon()">⚡ Summon Genie Now!</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3. MEMEX STOCK EXCHANGE TAB -->
         <div class="tab-content" id="viewEconomy">
             <div class="crystal-panel economy-card tilt-card" style="width:100%; padding:32px;">
                 <div class="economy-header" style="display:flex; justify-content:space-between; align-items:center;">
@@ -132,7 +151,7 @@
             </div>
         </div>
 
-        <!-- 3. IMMORTAL MEME HALL OF FAME TAB -->
+        <!-- 4. IMMORTAL MEME HALL OF FAME TAB -->
         <div class="tab-content" id="viewHallOfFame">
             <div class="crystal-panel hof-card tilt-card" style="width:100%; padding:32px;">
                 <div class="hof-header">
@@ -146,7 +165,7 @@
             </div>
         </div>
 
-        <!-- 4. GLOBAL LEADERBOARD & DAILY TRIVIA TAB -->
+        <!-- 5. GLOBAL LEADERBOARD & DAILY TRIVIA TAB -->
         <div class="tab-content" id="viewLeaderboard">
             <div class="crystal-panel leaderboard-card tilt-card" style="width:100%; padding:32px;">
                 <div class="lb-header" style="display:flex; justify-content:space-between; align-items:center;">
@@ -181,7 +200,7 @@
             </div>
         </div>
 
-        <!-- 5. FREE RAG WEB SEARCH TAB -->
+        <!-- 6. FREE RAG WEB SEARCH TAB -->
         <div class="tab-content" id="viewRag">
             <div class="crystal-panel rag-card tilt-card" style="width:100%; padding:32px;">
                 <div class="rag-header">
@@ -202,7 +221,7 @@
             </div>
         </div>
 
-        <!-- 6. MEME CREATOR STUDIO TAB -->
+        <!-- 7. MEME CREATOR STUDIO TAB -->
         <div class="tab-content" id="viewStudio">
             <div class="crystal-panel studio-card tilt-card">
                 <div class="studio-header">
@@ -254,7 +273,7 @@
             </div>
         </div>
 
-        <!-- 7. 5-ROUND MATCH ARENA TAB -->
+        <!-- 8. 5-ROUND MATCH ARENA TAB -->
         <div class="tab-content" id="viewArena">
             <div class="crystal-panel match-arena-card tilt-card">
                 <div class="arena-header">
@@ -299,7 +318,7 @@
             </div>
         </div>
 
-        <!-- 8. FRIENDS TAB -->
+        <!-- 9. FRIENDS TAB -->
         <div class="tab-content" id="viewFriends">
             <div class="crystal-panel friends-card tilt-card">
                 <h2 class="crystal-title">👥 Friends & Requests</h2>
@@ -326,7 +345,7 @@
             </div>
         </div>
 
-        <!-- 9. GENIE QUICK CHAT TAB -->
+        <!-- 10. GENIE QUICK CHAT TAB -->
         <div class="tab-content" id="viewChat">
             <div class="crystal-panel chat-container-card tilt-card">
                 <div class="chat-header" style="display:flex; justify-content:space-between; align-items:center;">

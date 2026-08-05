@@ -114,6 +114,28 @@ body.crystal-theme {
 .sound-fx-btn:active { transform: scale(0.92); }
 .sound-fx-btn:hover { background: rgba(0, 242, 254, 0.2); border-color: var(--neon-cyan); }
 
+/* ✨ ANIMATED ASCII TERMINAL BOX */
+.ascii-terminal-subpanel {
+    background: rgba(0, 0, 0, 0.85);
+    border: 2px solid var(--neon-cyan);
+    border-radius: 24px;
+    padding: 20px;
+    box-shadow: 0 0 35px rgba(0, 242, 254, 0.35), inset 0 0 20px rgba(0, 0, 0, 0.9);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.ascii-code-box {
+    font-family: 'Fira Code', 'Courier New', monospace;
+    font-size: 13px;
+    line-height: 1.25;
+    color: var(--neon-cyan);
+    text-shadow: 0 0 10px var(--neon-cyan), 0 0 20px var(--neon-purple);
+    margin: 0;
+    text-align: left;
+}
+
 /* iOS Crystal Buttons */
 .crystal-icon-btn { background: var(--ios-glass-bg); backdrop-filter: blur(25px); border: 1px solid var(--specular-border); border-top: 1px solid var(--specular-light); border-radius: 50%; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; font-size: 20px; color: white; cursor: pointer; transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 8px 20px rgba(0,0,0,0.4); }
 .crystal-icon-btn:active { transform: scale(0.92); }
@@ -139,40 +161,12 @@ body.crystal-theme {
 .crystal-panel { background: var(--ios-glass-bg); backdrop-filter: blur(40px) saturate(210%); -webkit-backdrop-filter: blur(40px) saturate(210%); border: 1px solid var(--specular-border); border-top: 1px solid var(--specular-light); border-radius: var(--squircle-radius); box-shadow: 0 30px 70px rgba(0, 0, 0, 0.6), inset 0 1px 2px rgba(255, 255, 255, 0.3); transition: transform 0.25s ease-out, box-shadow 0.3s ease; }
 
 /* MEMEX STOCK MARKET & HALL OF FAME STYLING */
-.stock-card {
-    background: var(--ios-glass-subpanel);
-    border: 1px solid var(--specular-border);
-    border-radius: 20px;
-    padding: 16px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
+.stock-card { background: var(--ios-glass-subpanel); border: 1px solid var(--specular-border); border-radius: 20px; padding: 16px; display: flex; flex-direction: column; gap: 10px; }
 .price-up { color: var(--neon-green); font-weight: 800; }
 .price-down { color: var(--neon-red); font-weight: 800; }
 
-.hof-card-item {
-    background: linear-gradient(135deg, rgba(251,191,36,0.1), rgba(18,15,38,0.7));
-    border: 1px solid rgba(251,191,36,0.4);
-    border-top: 1px solid rgba(255,255,255,0.5);
-    border-radius: 24px;
-    padding: 20px;
-    display: flex;
-    gap: 20px;
-    align-items: center;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-}
-
-.longevity-badge {
-    background: rgba(251, 191, 36, 0.2);
-    border: 1px solid rgba(251, 191, 36, 0.5);
-    color: var(--neon-gold);
-    font-size: 12px;
-    font-weight: 800;
-    padding: 4px 12px;
-    border-radius: 12px;
-}
+.hof-card-item { background: linear-gradient(135deg, rgba(251,191,36,0.1), rgba(18,15,38,0.7)); border: 1px solid rgba(251,191,36,0.4); border-top: 1px solid rgba(255,255,255,0.5); border-radius: 24px; padding: 20px; display: flex; gap: 20px; align-items: center; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+.longevity-badge { background: rgba(251, 191, 36, 0.2); border: 1px solid rgba(251, 191, 36, 0.5); color: var(--neon-gold); font-size: 12px; font-weight: 800; padding: 4px 12px; border-radius: 12px; }
 
 /* Liquid Genie Crystal Orb & Skin Glows */
 .genie-orb-wrap { position: relative; display: flex; flex-direction: column; align-items: center; gap: 14px; margin-bottom: 5px; }
